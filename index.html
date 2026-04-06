@@ -3,109 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GK Pro Quiz Portal</title>
+    <title>Subject-Wise GK Game</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #f4f4f9; display: flex; flex-direction: column; align-items: center; padding: 20px; }
-        .quiz-card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); width: 100%; max-width: 500px; }
-        .option { display: block; width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 6px; cursor: pointer; text-align: left; background: #fff; font-size: 16px; }
-        .option:hover { background: #e9ecef; }
-        .correct { background: #28a745 !important; color: white; }
-        .wrong { background: #dc3545 !important; color: white; }
-        #next-btn { margin-top: 20px; padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; display: none; width: 100%; }
-        #score-view { margin-bottom: 15px; font-weight: bold; font-size: 18px; color: #333; }
-        #loading { font-size: 20px; color: #666; }
+        /* Background aur Gaming Look */
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); 
+            color: white;
+            min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center; padding: 20px;
+        }
+        .container { 
+            background: rgba(255, 255, 255, 0.1); 
+            backdrop-filter: blur(10px);
+            padding: 30px; border-radius: 20px; 
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            width: 100%; max-width: 600px; text-align: center;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        select {
+            width: 100%; padding: 12px; margin-bottom: 20px;
+            border-radius: 8px; border: none; font-size: 16px; background: #fff;
+        }
+        .option-btn { 
+            display: block; width: 100%; padding: 15px; margin: 10px 0;
+            background: rgba(255, 255, 255, 0.9); color: #333;
+            border: none; border-radius: 10px; cursor: pointer;
+            font-size: 17px; transition: 0.3s; font-weight: 500;
+        }
+        .option-btn:hover { background: #ffd700; transform: scale(1.02); }
+        .correct { background: #2ecc71 !important; color: white; }
+        .wrong { background: #e74c3c !important; color: white; }
+        #next-btn { 
+            margin-top: 20px; padding: 12px 30px; 
+            background: #ffd700; color: #333; border: none;
+            border-radius: 50px; font-weight: bold; cursor: pointer; display: none;
+        }
+        #score-board { font-size: 20px; margin-bottom: 15px; color: #ffd700; }
     </style>
 </head>
 <body>
 
-    <div id="score-view">Score: 0</div>
+    <div id="score-board">Total Score: 0</div>
 
-    <div class="quiz-card">
-        <div id="loading">Sawal load ho rahe hain... kripya intezar karein.</div>
-        <div id="quiz-box" style="display:none;">
-            <h3 id="question-text">Sawal yahan dikhega?</h3>
-            <div id="options-container"></div>
-            <button id="next-btn" onclick="nextQuestion()">Agla Sawal</button>
+    <div class="container">
+        <h2>📚 Quiz Master 2.0</h2>
+        
+        <label for="subject-select">Apna Vishay Chunein:</label>
+        <select id="subject-select" onchange="filterSubject()">
+            <option value="All">Sabhi Vishay (Mix)</option>
+            <option value="Hindi">Hindi</option>
+            <option value="Math">Math</option>
+            <option value="Science">Science</option>
+            <option value="GK">General Knowledge</option>
+        </select>
+
+        <div id="quiz-area">
+            <h3 id="q-text">Sawal Load Ho Rahe Hain...</h3>
+            <div id="options-box"></div>
+            <button id="next-btn" onclick="showNext()">Agla Sawal ➔</button>
         </div>
     </div>
 
 <script>
-    // --- YAHAN APNI GOOGLE SHEET KI CSV LINK PASTE KAREIN ---
-    const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTuO6tzs1vDS-ZpLarL9ElAg4KMFAGXemXvBYb6LIsBvDhCaXVmHaeGV_TJqv7r9pJm__61Hwzv9s1q/pub?gid=946363742&single=true&output=csv'
+    const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTuO6tzs1vDS-ZpLarL9ElAg4KMFAGXemXvBYb6LIsBvDhCaXVmHaeGV_TJqv7r9pJm__61Hwzv9s1q/pub?gid=946363742&single=true&output=csv'; // Apni Link Yahan Dalein
 
-    let questions = [];
-    let currentIdx = 0;
-    let score = 0;
+    let allData = [];
+    let filteredQuestions = [];
+    let currentScore = 0;
 
-    // Google Sheet se data fetch karna
-    async function loadData() {
-        try {
-            const response = await fetch(CSV_URL);
-            const data = await response.text();
-            
-            // CSV ko rows aur columns mein todna
-            const rows = data.split('\n').slice(1); 
-            questions = rows.map(row => {
-                const cols = row.split(',');
-                return {
-                    q: cols[0],
-                    opts: [cols[1], cols[2], cols[3], cols[4]],
-                    ans: cols[5]?.trim(),
-                    cat: cols[6]
-                };
-            }).filter(item => item.q);
+    async function fetchData() {
+        const res = await fetch(SHEET_CSV_URL);
+        const text = await res.text();
+        const rows = text.split('\n').slice(1);
+        
+        allData = rows.map(r => {
+            const c = r.split(',');
+            return { q: c[0], opts: [c[1], c[2], c[3], c[4]], ans: c[5]?.trim(), sub: c[6]?.trim() };
+        }).filter(x => x.q);
 
-            document.getElementById('loading').style.display = 'none';
-            document.getElementById('quiz-box').style.display = 'block';
-            showQuestion();
-        } catch (e) {
-            document.getElementById('loading').innerText = "Data load nahi ho paya!";
-        }
+        filterSubject();
     }
 
-    function showQuestion() {
-        // 5000+ sawalon mein se random sawaal chunna
-        currentIdx = Math.floor(Math.random() * questions.length);
-        const item = questions[currentIdx];
-        
-        document.getElementById('question-text').innerText = item.q;
-        const container = document.getElementById('options-container');
-        container.innerHTML = '';
-        document.getElementById('next-btn').style.display = 'none';
+    function filterSubject() {
+        const selectedSub = document.getElementById('subject-select').value;
+        if(selectedSub === "All") {
+            filteredQuestions = allData;
+        } else {
+            filteredQuestions = allData.filter(item => item.sub === selectedSub);
+        }
+        showNext();
+    }
 
-        item.opts.forEach(opt => {
-            const btn = document.createElement('button');
-            btn.className = 'option';
-            btn.innerText = opt;
-            btn.onclick = () => checkAnswer(btn, opt, item.ans);
-            container.appendChild(btn);
+    function showNext() {
+        if(filteredQuestions.length === 0) {
+            document.getElementById('q-text').innerText = "Is vishay mein koi sawal nahi hai!";
+            document.getElementById('options-box').innerHTML = "";
+            return;
+        }
+
+        const randomQ = filteredQuestions[Math.floor(Math.random() * filteredQuestions.length)];
+        document.getElementById('q-text').innerText = randomQ.q;
+        document.getElementById('next-btn').style.display = "none";
+        
+        const box = document.getElementById('options-box');
+        box.innerHTML = "";
+
+        randomQ.opts.forEach(opt => {
+            const b = document.createElement('button');
+            b.className = 'option-btn';
+            b.innerText = opt;
+            b.onclick = () => {
+                const allButtons = document.querySelectorAll('.option-btn');
+                allButtons.forEach(btn => btn.style.pointerEvents = "none");
+
+                if(opt.trim() === randomQ.ans) {
+                    b.classList.add('correct');
+                    currentScore += 10;
+                    document.getElementById('score-board').innerText = `Total Score: ${currentScore}`;
+                } else {
+                    b.classList.add('wrong');
+                    allButtons.forEach(btn => {
+                        if(btn.innerText.trim() === randomQ.ans) btn.classList.add('correct');
+                    });
+                }
+                document.getElementById('next-btn').style.display = "inline-block";
+            };
+            box.appendChild(b);
         });
     }
 
-    function checkAnswer(btn, selected, correct) {
-        const allButtons = document.querySelectorAll('.option');
-        allButtons.forEach(b => b.style.pointerEvents = 'none');
-
-        if (selected.trim() === correct.trim()) {
-            btn.classList.add('correct');
-            score++;
-            document.getElementById('score-view').innerText = `Score: ${score}`;
-        } else {
-            btn.classList.add('wrong');
-            // Sahi answer ko highlight karna
-            allButtons.forEach(b => {
-                if(b.innerText.trim() === correct.trim()) b.classList.add('correct');
-            });
-        }
-        document.getElementById('next-btn').style.display = 'block';
-    }
-
-    function nextQuestion() {
-        showQuestion();
-    }
-
-    loadData();
+    fetchData();
 </script>
-
 </body>
 </html>
