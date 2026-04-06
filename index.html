@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GK Pro Quiz Portal</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f9; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        .quiz-card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); width: 100%; max-width: 500px; }
+        .option { display: block; width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 6px; cursor: pointer; text-align: left; background: #fff; font-size: 16px; }
+        .option:hover { background: #e9ecef; }
+        .correct { background: #28a745 !important; color: white; }
+        .wrong { background: #dc3545 !important; color: white; }
+        #next-btn { margin-top: 20px; padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; display: none; width: 100%; }
+        #score-view { margin-bottom: 15px; font-weight: bold; font-size: 18px; color: #333; }
+        #loading { font-size: 20px; color: #666; }
+    </style>
+</head>
+<body>
+
+    <div id="score-view">Score: 0</div>
+
+    <div class="quiz-card">
+        <div id="loading">Sawal load ho rahe hain... kripya intezar karein.</div>
+        <div id="quiz-box" style="display:none;">
+            <h3 id="question-text">Sawal yahan dikhega?</h3>
+            <div id="options-container"></div>
+            <button id="next-btn" onclick="nextQuestion()">Agla Sawal</button>
+        </div>
+    </div>
+
+<script>
+    // --- YAHAN APNI GOOGLE SHEET KI CSV LINK PASTE KAREIN ---
+    const CSV_URL = 'PASTE_YOUR_LINK_HERE';
+
+    let questions = [];
+    let currentIdx = 0;
+    let score = 0;
+
+    // Google Sheet se data fetch karna
+    async function loadData() {
+        try {
+            const response = await fetch(CSV_URL);
+            const data = await response.text();
+            
+            // CSV ko rows aur columns mein todna
+            const rows = data.split('\n').slice(1); 
+            questions = rows.map(row => {
+                const cols = row.split(',');
+                return {
+                    q: cols[0],
+                    opts: [cols[1], cols[2], cols[3], cols[4]],
+                    ans: cols[5]?.trim(),
+                    cat: cols[6]
+                };
+            }).filter(item => item.q);
+
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('quiz-box').style.display = 'block';
+            showQuestion();
+        } catch (e) {
+            document.getElementById('loading').innerText = "Data load nahi ho paya!";
+        }
+    }
+
+    function showQuestion() {
+        // 5000+ sawalon mein se random sawaal chunna
+        currentIdx = Math.floor(Math.random() * questions.length);
+        const item = questions[currentIdx];
+        
+        document.getElementById('question-text').innerText = item.q;
+        const container = document.getElementById('options-container');
+        container.innerHTML = '';
+        document.getElementById('next-btn').style.display = 'none';
+
+        item.opts.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'option';
+            btn.innerText = opt;
+            btn.onclick = () => checkAnswer(btn, opt, item.ans);
+            container.appendChild(btn);
+        });
+    }
+
+    function checkAnswer(btn, selected, correct) {
+        const allButtons = document.querySelectorAll('.option');
+        allButtons.forEach(b => b.style.pointerEvents = 'none');
+
+        if (selected.trim() === correct.trim()) {
+            btn.classList.add('correct');
+            score++;
+            document.getElementById('score-view').innerText = `Score: ${score}`;
+        } else {
+            btn.classList.add('wrong');
+            // Sahi answer ko highlight karna
+            allButtons.forEach(b => {
+                if(b.innerText.trim() === correct.trim()) b.classList.add('correct');
+            });
+        }
+        document.getElementById('next-btn').style.display = 'block';
+    }
+
+    function nextQuestion() {
+        showQuestion();
+    }
+
+    loadData();
+</script>
+
+</body>
+</html>
