@@ -3,185 +3,227 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GK Battle Pro</title>
+    <title>GK Battle Arena | Pro Edition</title>
     <style>
-        :root { --neon-blue: #00f2ff; --neon-purple: #bc13fe; }
+        :root { --neon-blue: #00f2ff; --neon-purple: #bc13fe; --dark-bg: #050505; }
+        
         body { 
             margin: 0; font-family: 'Segoe UI', sans-serif; 
             background: radial-gradient(circle, #1a1a2e 0%, #050505 100%);
             color: white; min-height: 100vh; display: flex; flex-direction: column; align-items: center;
         }
-        .container { width: 95%; max-width: 700px; margin-top: 30px; }
+
+        .container { width: 95%; max-width: 800px; margin-top: 30px; padding-bottom: 50px; }
+
+        /* UI Cards */
         .quiz-card { 
-            background: rgba(255,255,255,0.08); backdrop-filter: blur(15px); padding: 25px; 
+            background: rgba(255,255,255,0.08); backdrop-filter: blur(15px); padding: 30px; 
             border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 40px rgba(0,0,0,0.5);
         }
-        .q-eng { font-size: 1.4rem; color: var(--neon-blue); margin-bottom: 5px; font-weight: bold; }
-        .q-hin { font-size: 1.2rem; color: #ccc; margin-bottom: 20px; }
 
-        .opt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        /* Question Styles */
+        .q-eng { font-size: 1.5rem; color: var(--neon-blue); margin-bottom: 8px; font-weight: bold; line-height: 1.4; }
+        .q-hin { font-size: 1.3rem; color: #ccc; margin-bottom: 25px; border-left: 4px solid var(--neon-purple); padding-left: 15px; }
+
+        /* Options */
+        .opt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .opt { 
-            padding: 15px; border-radius: 10px; border: 2px solid rgba(255,255,255,0.2); 
-            background: rgba(255,255,255,0.05); cursor: pointer; transition: 0.3s; text-align: center; font-size: 1.1rem;
+            padding: 18px; border-radius: 12px; border: 2px solid rgba(255,255,255,0.2); 
+            background: rgba(255,255,255,0.05); cursor: pointer; transition: 0.3s; 
+            text-align: left; font-size: 1.1rem;
         }
+        .opt:hover { border-color: var(--neon-blue); background: rgba(0,242,255,0.05); }
         
-        /* User Color Feedback */
-        .correct { background: #27ae60 !important; border-color: #2ecc71 !important; color: white; font-weight: bold; }
-        .wrong { background: #c0392b !important; border-color: #e74c3c !important; color: white; }
+        /* Feedback Colors */
+        .correct { background: #27ae60 !important; border-color: #2ecc71 !important; color: white !important; font-weight: bold; }
+        .wrong { background: #c0392b !important; border-color: #e74c3c !important; color: white !important; }
 
-        .nav-btns { display: flex; justify-content: space-between; margin-top: 25px; gap: 10px; }
-        button { padding: 12px 20px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; }
-        .btn-nav { background: #34495e; color: white; flex: 1; }
-        .btn-finish { background: var(--neon-purple); color: white; width: 100%; margin-top: 15px; font-size: 1rem; }
+        /* Buttons */
+        .nav-btns { display: flex; justify-content: space-between; margin-top: 30px; gap: 15px; }
+        button { padding: 15px 25px; border-radius: 10px; border: none; cursor: pointer; font-weight: bold; text-transform: uppercase; }
+        .btn-nav { background: #34495e; color: white; flex: 1; font-size: 1rem; }
+        .btn-finish { background: var(--neon-purple); color: white; width: 100%; margin-top: 20px; font-size: 1.1rem; }
+
+        /* Stats */
+        .stats-header { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 1.2rem; font-weight: bold; color: #f1c40f; }
         
-        #score-display { font-size: 1.2rem; color: var(--neon-blue); margin-bottom: 10px; font-weight: bold; text-align: center; }
         #result-area { display: none; text-align: center; }
-        .final-score-box { font-size: 5rem; color: #f1c40f; margin: 20px 0; text-shadow: 0 0 20px rgba(241, 196, 15, 0.5); }
+        .final-score { font-size: 6rem; color: var(--neon-blue); text-shadow: 0 0 20px var(--neon-blue); margin: 20px 0; }
+
+        select { width: 100%; padding: 15px; margin-top: 20px; border-radius: 10px; background: #111; color: white; border: 1px solid var(--neon-blue); font-size: 1rem; }
+
+        @media (max-width: 600px) { .opt-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div id="setup-area" class="quiz-card" style="text-align: center;">
-        <h2 style="color:var(--neon-blue)">📚 GK BATTLE ARENA</h2>
-        <p>Vishay Chunein / Select Subject</p>
-        <select id="sub-sel" style="width:100%; padding:12px; margin-bottom:20px; border-radius:5px; background:#222; color:white; border:1px solid var(--neon-blue);">
-            <option value="All">All Subjects (Mix)</option>
-            <option value="GK">GK</option>
-            <option value="Math">Math</option>
-            <option value="Hindi">Hindi</option>
+        <h1 style="color:var(--neon-blue); letter-spacing: 2px;">GK BATTLE ARENA</h1>
+        <p>Apna Vishay Chunein / Select Your Subject</p>
+        
+        <select id="sub-sel">
+            <option value="All">All Subjects (Mixed)</option>
+            <option value="GK">General Knowledge</option>
+            <option value="Math">Mathematics</option>
+            <option value="Hindi">Hindi Grammar</option>
+            <option value="Science">Science</option>
         </select>
-        <button class="btn-finish" onclick="startQuiz()">QUIZ SHURU KAREIN</button>
+        
+        <button class="btn-finish" onclick="startQuiz()" style="margin-top: 30px;">BATTLE START KAREIN</button>
     </div>
 
     <div id="game-area" style="display: none;">
-        <div id="score-display">Live Score: <span id="current-score">0</span></div>
+        <div class="stats-header">
+            <span id="q-count">Q: 1</span>
+            <span>Live Score: <span id="live-score">0</span></span>
+        </div>
+        
         <div class="quiz-card">
-            <div class="q-eng" id="t-eng"></div>
-            <div class="q-hin" id="t-hin"></div>
-            <div class="opt-grid" id="o-grid"></div>
+            <div class="q-eng" id="txt-eng"></div>
+            <div class="q-hin" id="txt-hin"></div>
+            
+            <div class="opt-grid" id="opt-container"></div>
             
             <div class="nav-btns">
-                <button class="btn-nav" onclick="changeQ(-1)">◀ BACK</button>
-                <button class="btn-nav" onclick="changeQ(1)">NEXT ▶</button>
+                <button class="btn-nav" onclick="changeQuestion(-1)">◀ BACK</button>
+                <button class="btn-nav" onclick="changeQuestion(1)">NEXT ▶</button>
             </div>
-            <button class="btn-finish" onclick="finishQuiz()">FINISH & SHOW SCORE</button>
+            
+            <button class="btn-finish" onclick="showResult()">FINISH & SHOW RESULT</button>
         </div>
     </div>
 
     <div id="result-area" class="quiz-card">
-        <h1>FINAL SCORE</h1>
-        <div class="final-score-box" id="final-res">0</div>
-        <p style="font-size: 1.2rem;" id="final-msg"></p>
-        <button class="btn-nav" style="width: 100%;" onclick="location.reload()">HOME PAR JAYEIN</button>
+        <h2 style="color:var(--neon-purple)">MISSION COMPLETE</h2>
+        <p>Aapka Total Score:</p>
+        <div class="final-score" id="final-res">0</div>
+        <p id="summary-text"></p>
+        <button class="btn-nav" style="width:100%" onclick="location.reload()">HOME PAR JAYEIN</button>
     </div>
 </div>
 
 <script>
-    const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTuO6tzs1vDS-ZpLarL9ElAg4KMFAGXemXvBYb6LIsBvDhCaXVmHaeGV_TJqv7r9pJm__61Hwzv9s1q/pub?gid=946363742&single=true&output=csv'; // Yahan apni CSV link paste karein
-    let questions = [];
-    let currentIndex = 0;
+    const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTuO6tzs1vDS-ZpLarL9ElAg4KMFAGXemXvBYb6LIsBvDhCaXVmHaeGV_TJqv7r9pJm__61Hwzv9s1q/pub?gid=946363742&single=true&output=csv';
+    
+    let masterData = [];
+    let activeQuestions = [];
+    let currentIdx = 0;
     let score = 0;
-    let userAnswers = {}; // Store results of each question
+    let userMemory = {}; // Track user answers
 
-    async function loadData() {
+    // 1. Data Load Karein
+    async function init() {
         try {
-            const res = await fetch(SHEET_URL);
-            const data = await res.text();
+            const response = await fetch(CSV_URL);
+            const data = await response.text();
             const rows = data.split('\n').slice(1);
-            questions = rows.map((r, i) => {
-                const c = r.split(',');
-                return { 
+            
+            masterData = rows.map((row, i) => {
+                const cols = row.split(',').map(c => c.trim());
+                return {
                     id: i,
-                    eng: c[A]?.trim(), 
-                    hin: c[1]?.trim(), 
-                    opts: [c[B]?.trim(), c[C]?.trim(), c[D]?.trim(), c[E]?.trim()], 
-                    ans: c[F]?.trim(), 
-                    sub: c[7]?.trim() 
+                    eng: cols[0], hin: cols[1],
+                    opts: [cols[2], cols[3], cols[4], cols[5]],
+                    ans: cols[6], sub: cols[7]
                 };
             }).filter(q => q.eng);
-            console.log("Data Loaded Successfully");
-        } catch (e) {
-            alert("Error loading sheet data!");
+            console.log("Sheet Connected!");
+        } catch (err) {
+            alert("Database connect nahi ho pa raha!");
         }
     }
 
+    // 2. Quiz Start Logic
     function startQuiz() {
-        const sub = document.getElementById('sub-sel').value;
-        const filtered = sub === "All" ? questions : questions.filter(q => q.sub === sub);
-        questions = filtered.sort(() => 0.5 - Math.random());
-        
-        if(questions.length === 0) return alert("Is subject mein koi sawal nahi mile!");
-        
+        const selectedSub = document.getElementById('sub-sel').value;
+        activeQuestions = selectedSub === "All" ? 
+            masterData : masterData.filter(q => q.sub === selectedSub);
+
+        // Shuffle Questions
+        activeQuestions = activeQuestions.sort(() => 0.5 - Math.random());
+
+        if(activeQuestions.length === 0) {
+            alert("Is subject mein sawal nahi hain!");
+            return;
+        }
+
         document.getElementById('setup-area').style.display = 'none';
         document.getElementById('game-area').style.display = 'block';
-        showQuestion();
+        renderQuestion();
     }
 
-    function showQuestion() {
-        const q = questions[currentIndex];
-        document.getElementById('t-eng').innerText = q.eng;
-        document.getElementById('t-hin').innerText = q.hin;
+    // 3. Question Dikhaein
+    function renderQuestion() {
+        const q = activeQuestions[currentIdx];
+        document.getElementById('txt-eng').innerText = q.eng;
+        document.getElementById('txt-hin').innerText = q.hin;
+        document.getElementById('q-count').innerText = `Question: ${currentIdx + 1}/${activeQuestions.length}`;
         
-        const grid = document.getElementById('o-grid');
-        grid.innerHTML = "";
+        const container = document.getElementById('opt-container');
+        container.innerHTML = "";
 
         q.opts.forEach(opt => {
-            const btn = document.createElement('div');
-            btn.className = 'opt';
-            btn.innerText = opt;
-            
-            // Re-apply colors if already answered
-            if (userAnswers[currentIndex]) {
-                if (opt === q.ans) btn.classList.add('correct');
-                else if (opt === userAnswers[currentIndex].selected) btn.classList.add('wrong');
-                btn.style.pointerEvents = 'none';
+            const div = document.createElement('div');
+            div.className = 'opt';
+            div.innerText = opt;
+
+            // Agar pehle jawab de diya hai, to colors dikhaein
+            if(userMemory[currentIdx]) {
+                if(opt === q.ans) div.classList.add('correct');
+                else if(opt === userMemory[currentIdx].userChoice) div.classList.add('wrong');
+                div.style.pointerEvents = 'none';
             }
 
-            btn.onclick = () => checkAnswer(btn, opt, q.ans);
-            grid.appendChild(btn);
+            div.onclick = () => handleAnswer(div, opt, q.ans);
+            container.appendChild(div);
         });
     }
 
-    function checkAnswer(btn, selected, correct) {
-        if (userAnswers[currentIndex]) return;
+    // 4. Answer Check & Score Update
+    function handleAnswer(element, choice, correct) {
+        if(userMemory[currentIdx]) return;
 
-        const isCorrect = selected.toLowerCase().trim() === correct.toLowerCase().trim();
-        userAnswers[currentIndex] = { selected: selected, isCorrect: isCorrect };
+        // Clean text for perfect matching
+        const cleanChoice = choice.toLowerCase().trim();
+        const cleanCorrect = correct.toLowerCase().trim();
 
-        if (isCorrect) {
-            btn.classList.add('correct');
+        const isCorrect = cleanChoice === cleanCorrect;
+        userMemory[currentIdx] = { userChoice: choice, status: isCorrect };
+
+        if(isCorrect) {
+            element.classList.add('correct');
             score++;
-            document.getElementById('current-score').innerText = score;
+            document.getElementById('live-score').innerText = score;
         } else {
-            btn.classList.add('wrong');
-            // Show correct answer in green automatically
-            const allOpts = document.querySelectorAll('.opt');
-            allOpts.forEach(o => {
-                if (o.innerText.toLowerCase().trim() === correct.toLowerCase().trim()) {
-                    o.classList.add('correct');
-                }
+            element.classList.add('wrong');
+            // Sahi jawab ko green karein
+            Array.from(document.querySelectorAll('.opt')).forEach(o => {
+                if(o.innerText.toLowerCase().trim() === cleanCorrect) o.classList.add('correct');
             });
         }
-        // Disable further clicking on this question
+        
+        // Disable clicking
         document.querySelectorAll('.opt').forEach(o => o.style.pointerEvents = 'none');
     }
 
-    function changeQ(dir) {
-        if (currentIndex + dir >= 0 && currentIndex + dir < questions.length) {
-            currentIndex += dir;
-            showQuestion();
+    // 5. Navigation
+    function changeQuestion(step) {
+        if(currentIdx + step >= 0 && currentIdx + step < activeQuestions.length) {
+            currentIdx += step;
+            renderQuestion();
         }
     }
 
-    function finishQuiz() {
+    // 6. Final Result
+    function showResult() {
         document.getElementById('game-area').style.display = 'none';
         document.getElementById('result-area').style.display = 'block';
         document.getElementById('final-res').innerText = score;
-        document.getElementById('final-msg').innerText = `Aapne ${Object.keys(userAnswers).length} sawal hal kiye.`;
+        document.getElementById('summary-text').innerText = `Aapne kul ${activeQuestions.length} mein se ${score} sahi jawab diye.`;
     }
 
-    loadData();
+    init();
 </script>
 
 </body>
