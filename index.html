@@ -3,182 +3,182 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Custom GK Battle</title>
+    <title>GK Battle Pro</title>
     <style>
-        :root { --neon-blue: #00f2ff; --neon-purple: #bc13fe; --dark-bg: #050505; }
+        :root { --neon-blue: #00f2ff; --neon-purple: #bc13fe; }
         body { 
-            margin: 0; font-family: 'Rajdhani', sans-serif; background: radial-gradient(circle, #1a1a2e 0%, #050505 100%);
+            margin: 0; font-family: 'Segoe UI', sans-serif; 
+            background: radial-gradient(circle, #1a1a2e 0%, #050505 100%);
             color: white; min-height: 100vh; display: flex; flex-direction: column; align-items: center;
         }
-        .header { padding: 30px; text-align: center; width: 100%; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .header h1 { color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue); margin: 0; }
-        
-        .container { width: 90%; max-width: 700px; margin-top: 20px; }
+        .container { width: 95%; max-width: 700px; margin-top: 30px; }
         .quiz-card { 
-            background: rgba(255,255,255,0.05); backdrop-filter: blur(15px); padding: 30px; 
+            background: rgba(255,255,255,0.08); backdrop-filter: blur(15px); padding: 25px; 
             border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 40px rgba(0,0,0,0.5);
         }
+        .q-eng { font-size: 1.4rem; color: var(--neon-blue); margin-bottom: 5px; font-weight: bold; }
+        .q-hin { font-size: 1.2rem; color: #ccc; margin-bottom: 20px; }
 
-        .q-eng { font-size: 1.4rem; color: var(--neon-blue); margin-bottom: 8px; }
-        .q-hin { font-size: 1.2rem; color: #ccc; margin-bottom: 25px; }
-
-        .opt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .opt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .opt { 
-            padding: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.3); 
-            background: rgba(255,255,255,0.05); cursor: pointer; transition: 0.2s; text-align: center;
+            padding: 15px; border-radius: 10px; border: 2px solid rgba(255,255,255,0.2); 
+            background: rgba(255,255,255,0.05); cursor: pointer; transition: 0.3s; text-align: center; font-size: 1.1rem;
         }
         
-        /* User Requirement: Colors */
-        .correct { background: #27ae60 !important; border-color: #2ecc71 !important; color: white; }
+        /* User Color Feedback */
+        .correct { background: #27ae60 !important; border-color: #2ecc71 !important; color: white; font-weight: bold; }
         .wrong { background: #c0392b !important; border-color: #e74c3c !important; color: white; }
 
-        .nav-btns { display: flex; justify-content: space-between; margin-top: 30px; gap: 10px; }
-        button { 
-            padding: 12px 25px; border-radius: 5px; border: none; cursor: pointer; 
-            font-weight: bold; text-transform: uppercase; transition: 0.3s;
-        }
+        .nav-btns { display: flex; justify-content: space-between; margin-top: 25px; gap: 10px; }
+        button { padding: 12px 20px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; }
         .btn-nav { background: #34495e; color: white; flex: 1; }
-        .btn-finish { background: var(--neon-purple); color: white; flex: 1.5; box-shadow: 0 0 15px var(--neon-purple); }
-        button:hover { opacity: 0.8; transform: scale(1.05); }
-
-        #result-area { display: none; text-align: center; }
-        .score-box { font-size: 4rem; color: var(--neon-blue); margin: 20px 0; }
+        .btn-finish { background: var(--neon-purple); color: white; width: 100%; margin-top: 15px; font-size: 1rem; }
         
-        @media (max-width: 500px) { .opt-grid { grid-template-columns: 1fr; } }
+        #score-display { font-size: 1.2rem; color: var(--neon-blue); margin-bottom: 10px; font-weight: bold; text-align: center; }
+        #result-area { display: none; text-align: center; }
+        .final-score-box { font-size: 5rem; color: #f1c40f; margin: 20px 0; text-shadow: 0 0 20px rgba(241, 196, 15, 0.5); }
     </style>
 </head>
 <body>
 
-<div class="header"><h1>GK BATTLE ARENA</h1></div>
-
 <div class="container">
     <div id="setup-area" class="quiz-card" style="text-align: center;">
-        <h3>Vishay Chunav / Select Subject</h3>
-        <select id="sub-sel" style="width:100%; padding:12px; margin-bottom:20px; border-radius:5px; background:#222; color:white;">
+        <h2 style="color:var(--neon-blue)">📚 GK BATTLE ARENA</h2>
+        <p>Vishay Chunein / Select Subject</p>
+        <select id="sub-sel" style="width:100%; padding:12px; margin-bottom:20px; border-radius:5px; background:#222; color:white; border:1px solid var(--neon-blue);">
             <option value="All">All Subjects (Mix)</option>
-            <option value="GK">General Knowledge</option>
+            <option value="GK">GK</option>
             <option value="Math">Math</option>
             <option value="Hindi">Hindi</option>
         </select>
-        <button class="btn-finish" onclick="startQuiz()">Start Quiz</button>
+        <button class="btn-finish" onclick="startQuiz()">QUIZ SHURU KAREIN</button>
     </div>
 
     <div id="game-area" style="display: none;">
-        <div style="display:flex; justify-content: space-between; margin-bottom:10px; color:var(--neon-blue);">
-            <span id="q-num">Question: 1</span>
-            <span id="live-score">Score: 0</span>
-        </div>
+        <div id="score-display">Live Score: <span id="current-score">0</span></div>
         <div class="quiz-card">
-            <div id="q-content">
-                <div class="q-eng" id="t-eng"></div>
-                <div class="q-hin" id="t-hin"></div>
-                <div class="opt-grid" id="o-grid"></div>
-            </div>
+            <div class="q-eng" id="t-eng"></div>
+            <div class="q-hin" id="t-hin"></div>
+            <div class="opt-grid" id="o-grid"></div>
+            
             <div class="nav-btns">
-                <button class="btn-nav" onclick="goBack()">◀ Back</button>
-                <button class="btn-nav" onclick="goNext()">Next ▶</button>
+                <button class="btn-nav" onclick="changeQ(-1)">◀ BACK</button>
+                <button class="btn-nav" onclick="changeQ(1)">NEXT ▶</button>
             </div>
-            <button class="btn-finish" style="margin-top:15px; width:100%" onclick="showResult()">Finish & Show Score</button>
+            <button class="btn-finish" onclick="finishQuiz()">FINISH & SHOW SCORE</button>
         </div>
     </div>
 
     <div id="result-area" class="quiz-card">
-        <h2>Aapka Score</h2>
-        <div class="score-box" id="final-score">0</div>
-        <p id="msg"></p>
-        <button class="btn-nav" onclick="location.reload()" style="width:100%">Wapas Jayein (Home)</button>
+        <h1>FINAL SCORE</h1>
+        <div class="final-score-box" id="final-res">0</div>
+        <p style="font-size: 1.2rem;" id="final-msg"></p>
+        <button class="btn-nav" style="width: 100%;" onclick="location.reload()">HOME PAR JAYEIN</button>
     </div>
 </div>
 
 <script>
-    const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTuO6tzs1vDS-ZpLarL9ElAg4KMFAGXemXvBYb6LIsBvDhCaXVmHaeGV_TJqv7r9pJm__61Hwzv9s1q/pub?gid=946363742&single=true&output=csv'; 
-    let allData = [];
-    let pool = [];
-    let idx = 0;
+    const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTuO6tzs1vDS-ZpLarL9ElAg4KMFAGXemXvBYb6LIsBvDhCaXVmHaeGV_TJqv7r9pJm__61Hwzv9s1q/pub?gid=946363742&single=true&output=csv'; // Yahan apni CSV link paste karein
+    let questions = [];
+    let currentIndex = 0;
     let score = 0;
-    let answered = {}; // Tracking answers for each question
+    let userAnswers = {}; // Store results of each question
 
     async function loadData() {
-        const res = await fetch(SHEET_URL);
-        const text = await res.text();
-        const rows = text.split('\n').slice(1);
-        allData = rows.map(r => {
-            const c = r.split(',');
-            return { eng: c[0], hin: c[1], opts: [c[2], c[3], c[4], c[5]], ans: c[6]?.trim(), sub: c[7]?.trim() };
-        }).filter(x => x.eng);
+        try {
+            const res = await fetch(SHEET_URL);
+            const data = await res.text();
+            const rows = data.split('\n').slice(1);
+            questions = rows.map((r, i) => {
+                const c = r.split(',');
+                return { 
+                    id: i,
+                    eng: c[0]?.trim(), 
+                    hin: c[1]?.trim(), 
+                    opts: [c[2]?.trim(), c[3]?.trim(), c[4]?.trim(), c[5]?.trim()], 
+                    ans: c[6]?.trim(), 
+                    sub: c[7]?.trim() 
+                };
+            }).filter(q => q.eng);
+            console.log("Data Loaded Successfully");
+        } catch (e) {
+            alert("Error loading sheet data!");
+        }
     }
 
     function startQuiz() {
         const sub = document.getElementById('sub-sel').value;
-        pool = sub === "All" ? allData : allData.filter(x => x.sub === sub);
-        pool = pool.sort(() => 0.5 - Math.random()); // Shuffle questions
+        const filtered = sub === "All" ? questions : questions.filter(q => q.sub === sub);
+        questions = filtered.sort(() => 0.5 - Math.random());
+        
+        if(questions.length === 0) return alert("Is subject mein koi sawal nahi mile!");
         
         document.getElementById('setup-area').style.display = 'none';
         document.getElementById('game-area').style.display = 'block';
-        renderQ();
+        showQuestion();
     }
 
-    function renderQ() {
-        const q = pool[idx];
+    function showQuestion() {
+        const q = questions[currentIndex];
         document.getElementById('t-eng').innerText = q.eng;
         document.getElementById('t-hin').innerText = q.hin;
-        document.getElementById('q-num').innerText = `Question: ${idx + 1}`;
         
         const grid = document.getElementById('o-grid');
         grid.innerHTML = "";
 
-        q.opts.forEach(o => {
-            const d = document.createElement('div');
-            d.className = 'opt';
-            d.innerText = o;
+        q.opts.forEach(opt => {
+            const btn = document.createElement('div');
+            btn.className = 'opt';
+            btn.innerText = opt;
             
-            // Check if already answered
-            if(answered[idx]) {
-                if(o.trim() === pool[idx].ans) d.classList.add('correct');
-                else if(o === answered[idx].selected) d.classList.add('wrong');
-                d.style.pointerEvents = 'none';
+            // Re-apply colors if already answered
+            if (userAnswers[currentIndex]) {
+                if (opt === q.ans) btn.classList.add('correct');
+                else if (opt === userAnswers[currentIndex].selected) btn.classList.add('wrong');
+                btn.style.pointerEvents = 'none';
             }
 
-            d.onclick = () => handleSelect(d, o, q.ans);
-            grid.appendChild(d);
+            btn.onclick = () => checkAnswer(btn, opt, q.ans);
+            grid.appendChild(btn);
         });
     }
 
-    function handleSelect(el, sel, cor) {
-        if(answered[idx]) return;
+    function checkAnswer(btn, selected, correct) {
+        if (userAnswers[currentIndex]) return;
 
-        const isCorrect = sel.trim() === cor.trim();
-        answered[idx] = { selected: sel, correct: isCorrect };
+        const isCorrect = selected.toLowerCase().trim() === correct.toLowerCase().trim();
+        userAnswers[currentIndex] = { selected: selected, isCorrect: isCorrect };
 
-        if(isCorrect) {
-            el.classList.add('correct');
+        if (isCorrect) {
+            btn.classList.add('correct');
             score++;
-            document.getElementById('live-score').innerText = `Score: ${score}`;
+            document.getElementById('current-score').innerText = score;
         } else {
-            el.classList.add('wrong');
-            // Show correct answer automatically
-            Array.from(document.querySelectorAll('.opt')).forEach(b => {
-                if(b.innerText.trim() === cor.trim()) b.classList.add('correct');
+            btn.classList.add('wrong');
+            // Show correct answer in green automatically
+            const allOpts = document.querySelectorAll('.opt');
+            allOpts.forEach(o => {
+                if (o.innerText.toLowerCase().trim() === correct.toLowerCase().trim()) {
+                    o.classList.add('correct');
+                }
             });
         }
-        
-        // Lock options after selection
-        Array.from(document.querySelectorAll('.opt')).forEach(b => b.style.pointerEvents = 'none');
+        // Disable further clicking on this question
+        document.querySelectorAll('.opt').forEach(o => o.style.pointerEvents = 'none');
     }
 
-    function goNext() {
-        if(idx < pool.length - 1) { idx++; renderQ(); }
+    function changeQ(dir) {
+        if (currentIndex + dir >= 0 && currentIndex + dir < questions.length) {
+            currentIndex += dir;
+            showQuestion();
+        }
     }
 
-    function goBack() {
-        if(idx > 0) { idx--; renderQ(); }
-    }
-
-    function showResult() {
+    function finishQuiz() {
         document.getElementById('game-area').style.display = 'none';
         document.getElementById('result-area').style.display = 'block';
-        document.getElementById('final-score').innerText = score;
-        document.getElementById('msg').innerText = `Aapne total ${Object.keys(answered).length} sawal hal kiye.`;
+        document.getElementById('final-res').innerText = score;
+        document.getElementById('final-msg').innerText = `Aapne ${Object.keys(userAnswers).length} sawal hal kiye.`;
     }
 
     loadData();
