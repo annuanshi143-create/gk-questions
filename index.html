@@ -3,137 +3,383 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Subject-Wise GK Game</title>
+    <title>Mega Quiz Pro | 2026 Edition</title>
     <style>
-        /* Background aur Gaming Look */
-        body { 
-            font-family: 'Segoe UI', sans-serif; 
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); 
-            color: white;
-            min-height: 100vh;
-            display: flex; flex-direction: column; align-items: center; padding: 20px;
+        :root {
+            --primary: #00d2ff;
+            --secondary: #3a7bd5;
+            --dark: #0f172a;
+            --gold: #f1c40f;
         }
-        .container { 
-            background: rgba(255, 255, 255, 0.1); 
-            backdrop-filter: blur(10px);
-            padding: 30px; border-radius: 20px; 
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-            width: 100%; max-width: 600px; text-align: center;
-            border: 1px solid rgba(255,255,255,0.2);
+        body {
+            margin: 0; font-family: 'Poppins', sans-serif;
+            background: var(--dark); color: white; overflow-x: hidden;
         }
-        select {
-            width: 100%; padding: 12px; margin-bottom: 20px;
-            border-radius: 8px; border: none; font-size: 16px; background: #fff;
+        /* Hero Banner */
+        .hero {
+            height: 300px;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                        url('https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1000&q=80');
+            background-size: cover; background-position: center;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; border-bottom: 4px solid var(--primary);
         }
-        .option-btn { 
-            display: block; width: 100%; padding: 15px; margin: 10px 0;
-            background: rgba(255, 255, 255, 0.9); color: #333;
-            border: none; border-radius: 10px; cursor: pointer;
-            font-size: 17px; transition: 0.3s; font-weight: 500;
+        .hero h1 { font-size: 3rem; margin: 0; color: var(--primary); text-shadow: 0 0 20px rgba(0,210,255,0.5); }
+        
+        .container { max-width: 800px; margin: -50px auto 50px; padding: 20px; }
+        
+        .quiz-card {
+            background: rgba(30, 41, 59, 0.95); padding: 30px; border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1);
         }
-        .option-btn:hover { background: #ffd700; transform: scale(1.02); }
-        .correct { background: #2ecc71 !important; color: white; }
-        .wrong { background: #e74c3c !important; color: white; }
-        #next-btn { 
-            margin-top: 20px; padding: 12px 30px; 
-            background: #ffd700; color: #333; border: none;
-            border-radius: 50px; font-weight: bold; cursor: pointer; display: none;
+
+        /* Dual Language Font Style */
+        .q-eng { font-size: 1.3rem; color: var(--primary); margin-bottom: 5px; font-weight: 600; }
+        .q-hin { font-size: 1.2rem; color: #ddd; margin-bottom: 20px; font-family: 'Arial', sans-serif; }
+
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .opt-btn {
+            background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.1);
+            color: white; padding: 15px; border-radius: 12px; cursor: pointer;
+            transition: 0.3s; font-size: 1rem; text-align: left;
         }
-        #score-board { font-size: 20px; margin-bottom: 15px; color: #ffd700; }
+        .opt-btn:hover { background: var(--secondary); border-color: var(--primary); transform: translateY(-3px); }
+        
+        .correct { background: #27ae60 !important; border-color: #2ecc71 !important; }
+        .wrong { background: #c0392b !important; border-color: #e74c3c !important; }
+
+        .stats { display: flex; justify-content: space-between; margin-bottom: 15px; color: var(--gold); font-weight: bold; }
+
+        /* Result Screen */
+        #result-screen { display: none; text-align: center; }
+        .circle-score {
+            width: 150px; height: 150px; border-radius: 50%; border: 8px solid var(--gold);
+            line-height: 150px; font-size: 2.5rem; margin: 20px auto;
+        }
     </style>
 </head>
 <body>
 
-    <div id="score-board">Total Score: 0</div>
+    <div class="hero">
+        <h1>BATTLE QUIZ</h1>
+        <p>Aapki Taiyari, Hamari Chunauti</p>
+    </div>
 
     <div class="container">
-        <h2>📚 Quiz Master 2.0</h2>
-        
-        <label for="subject-select">Apna Vishay Chunein:</label>
-        <select id="subject-select" onchange="filterSubject()">
-            <option value="All">Sabhi Vishay (Mix)</option>
-            <option value="Hindi">Hindi</option>
-            <option value="Math">Math</option>
-            <option value="Science">Science</option>
-            <option value="GK">General Knowledge</option>
-        </select>
+        <div id="game-area">
+            <div class="stats">
+                <span id="sub-tag">Subject: Select Below</span>
+                <span id="q-count">Question: 1/20</span>
+            </div>
 
-        <div id="quiz-area">
-            <h3 id="q-text">Sawal Load Ho Rahe Hain...</h3>
-            <div id="options-box"></div>
-            <button id="next-btn" onclick="showNext()">Agla Sawal ➔</button>
+            <div class="quiz-card">
+                <select id="sub-select" onchange="startNewQuiz()" style="width:100%; padding:10px; margin-bottom:20px; border-radius:8px;">
+                    <option value="All">All Subjects</option>
+                    <option value="GK">GK</option>
+                    <option value="Math">Math</option>
+                    <option value="Hindi">Hindi</option>
+                </select>
+
+                <div id="question-content">
+                    <div class="q-eng" id="eng-text">Loading Questions...</div>
+                    <div class="q-hin" id="hin-text">Sawal load ho rahe hain...</div>
+                    <div class="options-grid" id="opt-container"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="result-screen" class="quiz-card">
+            <h2>Khel Samapt!</h2>
+            <div class="circle-score" id="final-score">0</div>
+            <p id="feedback">Koshish achhi thi!</p>
+            <button onclick="location.reload()" style="padding:15px 30px; border-radius:50px; background:var(--primary); border:none; cursor:pointer; font-weight:bold;">Dobara Kheleinte</button>
         </div>
     </div>
 
 <script>
-    const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTuO6tzs1vDS-ZpLarL9ElAg4KMFAGXemXvBYb6LIsBvDhCaXVmHaeGV_TJqv7r9pJm__61Hwzv9s1q/pub?gid=946363742&single=true&output=csv'; // Apni Link Yahan Dalein
+    const CSV_URL = '<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mega Quiz Pro | 2026 Edition</title>
+    <style>
+        :root {
+            --primary: #00d2ff;
+            --secondary: #3a7bd5;
+            --dark: #0f172a;
+            --gold: #f1c40f;
+        }
+        body {
+            margin: 0; font-family: 'Poppins', sans-serif;
+            background: var(--dark); color: white; overflow-x: hidden;
+        }
+        /* Hero Banner */
+        .hero {
+            height: 300px;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                        url('https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1000&q=80');
+            background-size: cover; background-position: center;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; border-bottom: 4px solid var(--primary);
+        }
+        .hero h1 { font-size: 3rem; margin: 0; color: var(--primary); text-shadow: 0 0 20px rgba(0,210,255,0.5); }
+        
+        .container { max-width: 800px; margin: -50px auto 50px; padding: 20px; }
+        
+        .quiz-card {
+            background: rgba(30, 41, 59, 0.95); padding: 30px; border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1);
+        }
 
+        /* Dual Language Font Style */
+        .q-eng { font-size: 1.3rem; color: var(--primary); margin-bottom: 5px; font-weight: 600; }
+        .q-hin { font-size: 1.2rem; color: #ddd; margin-bottom: 20px; font-family: 'Arial', sans-serif; }
+
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .opt-btn {
+            background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.1);
+            color: white; padding: 15px; border-radius: 12px; cursor: pointer;
+            transition: 0.3s; font-size: 1rem; text-align: left;
+        }
+        .opt-btn:hover { background: var(--secondary); border-color: var(--primary); transform: translateY(-3px); }
+        
+        .correct { background: #27ae60 !important; border-color: #2ecc71 !important; }
+        .wrong { background: #c0392b !important; border-color: #e74c3c !important; }
+
+        .stats { display: flex; justify-content: space-between; margin-bottom: 15px; color: var(--gold); font-weight: bold; }
+
+        /* Result Screen */
+        #result-screen { display: none; text-align: center; }
+        .circle-score {
+            width: 150px; height: 150px; border-radius: 50%; border: 8px solid var(--gold);
+            line-height: 150px; font-size: 2.5rem; margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hero">
+        <h1>BATTLE QUIZ</h1>
+        <p>Aapki Taiyari, Hamari Chunauti</p>
+    </div>
+
+    <div class="container">
+        <div id="game-area">
+            <div class="stats">
+                <span id="sub-tag">Subject: Select Below</span>
+                <span id="q-count">Question: 1/20</span>
+            </div>
+
+            <div class="quiz-card">
+                <select id="sub-select" onchange="startNewQuiz()" style="width:100%; padding:10px; margin-bottom:20px; border-radius:8px;">
+                    <option value="All">All Subjects</option>
+                    <option value="GK">GK</option>
+                    <option value="Math">Math</option>
+                    <option value="Hindi">Hindi</option>
+                </select>
+
+                <div id="question-content">
+                    <div class="q-eng" id="eng-text">Loading Questions...</div>
+                    <div class="q-hin" id="hin-text">Sawal load ho rahe hain...</div>
+                    <div class="options-grid" id="opt-container"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="result-screen" class="quiz-card">
+            <h2>Khel Samapt!</h2>
+            <div class="circle-score" id="final-score">0</div>
+            <p id="feedback">Koshish achhi thi!</p>
+            <button onclick="location.reload()" style="padding:15px 30px; border-radius:50px; background:var(--primary); border:none; cursor:pointer; font-weight:bold;">Dobara Kheleinte</button>
+        </div>
+    </div>
+
+<script>
+    const CSV_URL = 'PASTE_YOUR_LINK_HERE'; // Apni CSV link yahan dalein
     let allData = [];
-    let filteredQuestions = [];
-    let currentScore = 0;
+    let currentPool = [];
+    let currentIndex = 0;
+    let score = 0;
+    let questionsAnswered = 0;
 
-    async function fetchData() {
-        const res = await fetch(SHEET_CSV_URL);
-        const text = await res.text();
-        const rows = text.split('\n').slice(1);
+    async function loadQuestions() {
+        const res = await fetch(CSV_URL);
+        const data = await res.text();
+        const rows = data.split('\n').slice(1);
         
         allData = rows.map(r => {
             const c = r.split(',');
-            return { q: c[0], opts: [c[1], c[2], c[3], c[4]], ans: c[5]?.trim(), sub: c[6]?.trim() };
-        }).filter(x => x.q);
-
-        filterSubject();
+            return { 
+                eng: c[0], hin: c[1], 
+                opts: [c[2], c[3], c[4], c[5]], 
+                ans: c[6]?.trim(), sub: c[7]?.trim() 
+            };
+        }).filter(x => x.eng);
+        startNewQuiz();
     }
 
-    function filterSubject() {
-        const selectedSub = document.getElementById('subject-select').value;
-        if(selectedSub === "All") {
-            filteredQuestions = allData;
-        } else {
-            filteredQuestions = allData.filter(item => item.sub === selectedSub);
-        }
-        showNext();
+    function startNewQuiz() {
+        const sub = document.getElementById('sub-select').value;
+        currentPool = sub === "All" ? allData : allData.filter(x => x.sub === sub);
+        // Pool ko shuffle karein
+        currentPool = currentPool.sort(() => 0.5 - Math.random());
+        
+        currentIndex = 0;
+        score = 0;
+        questionsAnswered = 0;
+        document.getElementById('game-area').style.display = "block";
+        document.getElementById('result-screen').style.display = "none";
+        showQuestion();
     }
 
-    function showNext() {
-        if(filteredQuestions.length === 0) {
-            document.getElementById('q-text').innerText = "Is vishay mein koi sawal nahi hai!";
-            document.getElementById('options-box').innerHTML = "";
+    function showQuestion() {
+        if (questionsAnswered >= 20 || currentIndex >= currentPool.length) {
+            showResult();
             return;
         }
 
-        const randomQ = filteredQuestions[Math.floor(Math.random() * filteredQuestions.length)];
-        document.getElementById('q-text').innerText = randomQ.q;
-        document.getElementById('next-btn').style.display = "none";
+        const q = currentPool[currentIndex];
+        document.getElementById('eng-text').innerText = q.eng;
+        document.getElementById('hin-text').innerText = q.hin;
+        document.getElementById('q-count').innerText = `Question: ${questionsAnswered + 1}/20`;
         
-        const box = document.getElementById('options-box');
-        box.innerHTML = "";
+        const container = document.getElementById('opt-container');
+        container.innerHTML = "";
 
-        randomQ.opts.forEach(opt => {
-            const b = document.createElement('button');
-            b.className = 'option-btn';
-            b.innerText = opt;
-            b.onclick = () => {
-                const allButtons = document.querySelectorAll('.option-btn');
-                allButtons.forEach(btn => btn.style.pointerEvents = "none");
-
-                if(opt.trim() === randomQ.ans) {
-                    b.classList.add('correct');
-                    currentScore += 10;
-                    document.getElementById('score-board').innerText = `Total Score: ${currentScore}`;
-                } else {
-                    b.classList.add('wrong');
-                    allButtons.forEach(btn => {
-                        if(btn.innerText.trim() === randomQ.ans) btn.classList.add('correct');
-                    });
-                }
-                document.getElementById('next-btn').style.display = "inline-block";
-            };
-            box.appendChild(b);
+        q.opts.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'opt-btn';
+            btn.innerText = opt;
+            btn.onclick = () => checkAns(btn, opt, q.ans);
+            container.appendChild(btn);
         });
     }
 
-    fetchData();
+    function checkAns(btn, selected, correct) {
+        const btns = document.querySelectorAll('.opt-btn');
+        btns.forEach(b => b.style.pointerEvents = "none");
+
+        if(selected.trim() === correct.trim()) {
+            btn.classList.add('correct');
+            score++;
+        } else {
+            btn.classList.add('wrong');
+            btns.forEach(b => { if(b.innerText.trim() === correct.trim()) b.classList.add('correct'); });
+        }
+
+        setTimeout(() => {
+            questionsAnswered++;
+            currentIndex++;
+            showQuestion();
+        }, 1500);
+    }
+
+    function showResult() {
+        document.getElementById('game-area').style.display = "none";
+        document.getElementById('result-screen').style.display = "block";
+        document.getElementById('final-score').innerText = `${score}/20`;
+        
+        const feedback = document.getElementById('feedback');
+        if(score > 15) feedback.innerText = "Behatareen! Aap ek Genius hain!";
+        else if(score > 10) feedback.innerText = "Achha pradarshan! Thodi aur mehnat karein.";
+        else feedback.innerText = "Dobara koshish karein, seekhte rahein!";
+    }
+
+    loadQuestions();
+</script>
+</body>
+</html>'; // Apni CSV link yahan dalein
+    let allData = [];
+    let currentPool = [];
+    let currentIndex = 0;
+    let score = 0;
+    let questionsAnswered = 0;
+
+    async function loadQuestions() {
+        const res = await fetch(CSV_URL);
+        const data = await res.text();
+        const rows = data.split('\n').slice(1);
+        
+        allData = rows.map(r => {
+            const c = r.split(',');
+            return { 
+                eng: c[0], hin: c[1], 
+                opts: [c[2], c[3], c[4], c[5]], 
+                ans: c[6]?.trim(), sub: c[7]?.trim() 
+            };
+        }).filter(x => x.eng);
+        startNewQuiz();
+    }
+
+    function startNewQuiz() {
+        const sub = document.getElementById('sub-select').value;
+        currentPool = sub === "All" ? allData : allData.filter(x => x.sub === sub);
+        // Pool ko shuffle karein
+        currentPool = currentPool.sort(() => 0.5 - Math.random());
+        
+        currentIndex = 0;
+        score = 0;
+        questionsAnswered = 0;
+        document.getElementById('game-area').style.display = "block";
+        document.getElementById('result-screen').style.display = "none";
+        showQuestion();
+    }
+
+    function showQuestion() {
+        if (questionsAnswered >= 20 || currentIndex >= currentPool.length) {
+            showResult();
+            return;
+        }
+
+        const q = currentPool[currentIndex];
+        document.getElementById('eng-text').innerText = q.eng;
+        document.getElementById('hin-text').innerText = q.hin;
+        document.getElementById('q-count').innerText = `Question: ${questionsAnswered + 1}/20`;
+        
+        const container = document.getElementById('opt-container');
+        container.innerHTML = "";
+
+        q.opts.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'opt-btn';
+            btn.innerText = opt;
+            btn.onclick = () => checkAns(btn, opt, q.ans);
+            container.appendChild(btn);
+        });
+    }
+
+    function checkAns(btn, selected, correct) {
+        const btns = document.querySelectorAll('.opt-btn');
+        btns.forEach(b => b.style.pointerEvents = "none");
+
+        if(selected.trim() === correct.trim()) {
+            btn.classList.add('correct');
+            score++;
+        } else {
+            btn.classList.add('wrong');
+            btns.forEach(b => { if(b.innerText.trim() === correct.trim()) b.classList.add('correct'); });
+        }
+
+        setTimeout(() => {
+            questionsAnswered++;
+            currentIndex++;
+            showQuestion();
+        }, 1500);
+    }
+
+    function showResult() {
+        document.getElementById('game-area').style.display = "none";
+        document.getElementById('result-screen').style.display = "block";
+        document.getElementById('final-score').innerText = `${score}/20`;
+        
+        const feedback = document.getElementById('feedback');
+        if(score > 15) feedback.innerText = "Behatareen! Aap ek Genius hain!";
+        else if(score > 10) feedback.innerText = "Achha pradarshan! Thodi aur mehnat karein.";
+        else feedback.innerText = "Dobara koshish karein, seekhte rahein!";
+    }
+
+    loadQuestions();
 </script>
 </body>
 </html>
