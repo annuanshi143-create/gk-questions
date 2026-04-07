@@ -93,10 +93,10 @@
                 const c = r.split(',');
                 return { 
                     id: i,
-                    eng: c[0]?.trim(), 
+                    eng: c[A]?.trim(), 
                     hin: c[1]?.trim(), 
-                    opts: [c[2]?.trim(), c[3]?.trim(), c[4]?.trim(), c[5]?.trim()], 
-                    ans: c[6]?.trim(), 
+                    opts: [c[B]?.trim(), c[C]?.trim(), c[D]?.trim(), c[E]?.trim()], 
+                    ans: c[F]?.trim(), 
                     sub: c[7]?.trim() 
                 };
             }).filter(q => q.eng);
