@@ -3,174 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GK Battle Pro</title>
+    <title>GK Battle Arena</title>
     <style>
-        :root { --neon-blue: #00f2ff; --neon-purple: #bc13fe; }
+        :root { --blue: #00f2ff; --purple: #bc13fe; }
         body { 
-            margin: 0; font-family: 'Segoe UI', sans-serif; 
-            background: radial-gradient(circle, #1a1a2e 0%, #050505 100%);
+            margin: 0; font-family: sans-serif; 
+            background: #050505; background-image: radial-gradient(#1a1a2e, #050505);
             color: white; min-height: 100vh; display: flex; flex-direction: column; align-items: center;
         }
         .container { width: 95%; max-width: 700px; margin-top: 30px; }
-        .quiz-card { 
-            background: rgba(255,255,255,0.08); backdrop-filter: blur(15px); padding: 25px; 
-            border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        .card { 
+            background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); padding: 25px; 
+            border-radius: 15px; border: 1px solid rgba(255,255,255,0.1);
         }
-        .q-eng { font-size: 1.4rem; color: var(--neon-blue); margin-bottom: 5px; font-weight: bold; }
-        .q-hin { font-size: 1.2rem; color: #ccc; margin-bottom: 20px; border-left: 3px solid var(--neon-purple); padding-left: 10px; }
-
-        .opt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .q-eng { font-size: 1.4rem; color: var(--blue); margin-bottom: 5px; font-weight: bold; }
+        .q-hin { font-size: 1.2rem; color: #ccc; margin-bottom: 20px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .opt { 
-            padding: 15px; border-radius: 10px; border: 2px solid rgba(255,255,255,0.2); 
-            background: rgba(255,255,255,0.05); cursor: pointer; transition: 0.3s; text-align: center; font-size: 1.1rem;
+            padding: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.2); 
+            background: rgba(255,255,255,0.05); cursor: pointer; text-align: center;
         }
-        
-        /* Fixed Colors */
-        .correct { background: #27ae60 !important; border-color: #2ecc71 !important; color: white !important; }
-        .wrong { background: #c0392b !important; border-color: #e74c3c !important; color: white !important; }
-
-        .nav-btns { display: flex; justify-content: space-between; margin-top: 25px; gap: 10px; }
-        button { padding: 12px 20px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; }
-        .btn-nav { background: #34495e; color: white; flex: 1; }
-        .btn-finish { background: var(--neon-purple); color: white; width: 100%; margin-top: 15px; font-size: 1rem; }
-        
-        #score-display { font-size: 1.2rem; color: var(--neon-blue); margin-bottom: 10px; font-weight: bold; }
-        #result-area { display: none; text-align: center; }
-        .final-score-box { font-size: 5rem; color: #f1c40f; margin: 10px 0; }
+        .correct { background: #27ae60 !important; border-color: #2ecc71 !important; }
+        .wrong { background: #c0392b !important; border-color: #e74c3c !important; }
+        .nav { display: flex; justify-content: space-between; margin-top: 20px; gap: 10px; }
+        button { padding: 12px; border-radius: 5px; border: none; cursor: pointer; font-weight: bold; }
+        .btn-p { background: var(--purple); color: white; width: 100%; margin-top: 15px; }
+        @media (max-width: 500px) { .grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div id="setup-area" class="quiz-card" style="text-align: center;">
-        <h2 style="color:var(--neon-blue)">GK BATTLE ARENA</h2>
-        <select id="sub-sel" style="width:100%; padding:12px; margin-bottom:20px; border-radius:5px; background:#222; color:white;">
-            <option value="All">All Subjects</option>
-            <option value="GK">GK</option>
-            <option value="Math">Math</option>
-        </select>
-        <button class="btn-finish" onclick="startQuiz()">START QUIZ</button>
+    <div id="setup" class="card" style="text-align:center">
+        <h2>BATTLE ARENA</h2>
+        <button class="btn-p" onclick="start()">START GAME</button>
     </div>
 
-    <div id="game-area" style="display: none;">
-        <div id="score-display">Live Score: <span id="current-score">0</span></div>
-        <div class="quiz-card">
-            <div class="q-eng" id="t-eng"></div>
-            <div class="q-hin" id="t-hin"></div>
-            <div id="o-grid" class="opt-grid"></div>
-            
-            <div class="nav-btns">
-                <button class="btn-nav" onclick="changeQ(-1)">◀ BACK</button>
-                <button class="btn-nav" onclick="changeQ(1)">NEXT ▶</button>
+    <div id="quiz" style="display:none">
+        <div style="margin-bottom:10px; color:var(--blue)">Score: <span id="sc">0</span></div>
+        <div class="card">
+            <div class="q-eng" id="eng"></div>
+            <div class="q-hin" id="hin"></div>
+            <div id="opts" class="grid"></div>
+            <div class="nav">
+                <button onclick="move(-1)" style="background:#444; color:white; flex:1">BACK</button>
+                <button onclick="move(1)" style="background:#444; color:white; flex:1">NEXT</button>
             </div>
-            <button class="btn-finish" onclick="finishQuiz()">FINISH & SHOW RESULT</button>
+            <button class="btn-p" onclick="showRes()">FINISH</button>
         </div>
     </div>
 
-    <div id="result-area" class="quiz-card">
-        <h1>FINAL SCORE</h1>
-        <div class="final-score-box" id="final-res">0</div>
-        <button class="btn-nav" style="width: 100%;" onclick="location.reload()">RESTART</button>
+    <div id="res" class="card" style="display:none; text-align:center">
+        <h1>SCORE: <span id="fsc">0</span></h1>
+        <button onclick="location.reload()" class="btn-p">RESTART</button>
     </div>
 </div>
 
 <script>
-    const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTuO6tzs1vDS-ZpLarL9ElAg4KMFAGXemXvBYb6LIsBvDhCaXVmHaeGV_TJqv7r9pJm__61Hwzv9s1q/pub?gid=946363742&single=true&output=csv';
+    // Link Updated to TSV for better accuracy
+    const URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTuO6tzs1vDS-ZpLarL9ElAg4KMFAGXemXvBYb6LIsBvDhCaXVmHaeGV_TJqv7r9pJm__61Hwzv9s1q/pub?gid=946363742&single=true&output=tsv';
     
-    let questions = [];
-    let currentIndex = 0;
-    let score = 0;
-    let userAnswers = {};
+    let data = [], cur = 0, score = 0, memory = {};
 
-    async function loadData() {
-        const res = await fetch(SHEET_URL);
-        const data = await res.text();
-        const rows = data.split('\n').slice(1);
-        questions = rows.map((r, i) => {
-            const c = r.split(',');
-            return { 
-                eng: c[0]?.trim(), hin: c[1]?.trim(), 
-                opts: [c[2]?.trim(), c[3]?.trim(), c[4]?.trim(), c[5]?.trim()], 
-                ans: c[6]?.trim(), sub: c[7]?.trim() 
-            };
-        }).filter(q => q.eng);
+    async function load() {
+        const r = await fetch(URL);
+        const t = await r.text();
+        const rows = t.split('\n').slice(1);
+        data = rows.map(row => {
+            const c = row.split('\t'); // Tab based splitting
+            return { e: c[0], h: c[1], o: [c[2], c[3], c[4], c[5]], a: c[6]?.trim() };
+        }).filter(x => x.e);
     }
 
-    function startQuiz() {
-        const sub = document.getElementById('sub-sel').value;
-        const filtered = sub === "All" ? questions : questions.filter(q => q.sub === sub);
-        questions = filtered.sort(() => 0.5 - Math.random());
-        document.getElementById('setup-area').style.display = 'none';
-        document.getElementById('game-area').style.display = 'block';
-        showQuestion();
+    function start() {
+        document.getElementById('setup').style.display='none';
+        document.getElementById('quiz').style.display='block';
+        render();
     }
 
-    function showQuestion() {
-        const q = questions[currentIndex];
-        document.getElementById('t-eng').innerText = q.eng || "";
-        document.getElementById('t-hin').innerText = q.hin || "";
-        
-        const grid = document.getElementById('o-grid');
-        grid.innerHTML = "";
-
-        q.opts.forEach(opt => {
-            const btn = document.createElement('div');
-            btn.className = 'opt';
-            btn.innerText = opt;
-            
-            // Re-apply styles if answered
-            if (userAnswers[currentIndex]) {
-                const isCorrect = opt.toLowerCase() === q.ans.toLowerCase();
-                const isUserChoice = opt === userAnswers[currentIndex].selected;
-                if (isCorrect) btn.classList.add('correct');
-                else if (isUserChoice) btn.classList.add('wrong');
-                btn.style.pointerEvents = 'none';
+    function render() {
+        const q = data[cur];
+        document.getElementById('eng').innerText = q.e;
+        document.getElementById('hin').innerText = q.h;
+        const box = document.getElementById('opts');
+        box.innerHTML = "";
+        q.o.forEach(opt => {
+            const d = document.createElement('div');
+            d.className = 'opt';
+            d.innerText = opt;
+            if(memory[cur]) {
+                if(opt.trim() === q.a) d.classList.add('correct');
+                else if(opt === memory[cur]) d.classList.add('wrong');
+                d.style.pointerEvents = 'none';
             }
-
-            btn.onclick = () => checkAnswer(btn, opt, q.ans);
-            grid.appendChild(btn);
+            d.onclick = () => {
+                if(memory[cur]) return;
+                memory[cur] = opt;
+                if(opt.trim() === q.a) { d.classList.add('correct'); score++; document.getElementById('sc').innerText=score; }
+                else { 
+                    d.classList.add('wrong'); 
+                    Array.from(box.children).forEach(b => { if(b.innerText.trim() === q.a) b.classList.add('correct'); });
+                }
+                Array.from(box.children).forEach(b => b.style.pointerEvents = 'none');
+            };
+            box.appendChild(d);
         });
     }
 
-    function checkAnswer(btn, selected, correct) {
-        if (userAnswers[currentIndex]) return;
-
-        // "Super Flexible" Match: Space aur Capital letter ka farq mita diya
-        const s = selected.toLowerCase().trim();
-        const c = correct.toLowerCase().trim();
-        const isCorrect = (s === c);
-
-        userAnswers[currentIndex] = { selected: selected, isCorrect: isCorrect };
-
-        if (isCorrect) {
-            btn.classList.add('correct');
-            score++;
-            document.getElementById('current-score').innerText = score;
-        } else {
-            btn.classList.add('wrong');
-            // Show correct green automatically
-            const all = document.querySelectorAll('.opt');
-            all.forEach(o => {
-                if(o.innerText.toLowerCase().trim() === c) o.classList.add('correct');
-            });
-        }
-        document.querySelectorAll('.opt').forEach(o => o.style.pointerEvents = 'none');
+    function move(d) { if(cur+d>=0 && cur+d<data.length) { cur+=d; render(); } }
+    function showRes() {
+        document.getElementById('quiz').style.display='none';
+        document.getElementById('res').style.display='block';
+        document.getElementById('fsc').innerText = score;
     }
-
-    function changeQ(dir) {
-        if (currentIndex + dir >= 0 && currentIndex + dir < questions.length) {
-            currentIndex += dir;
-            showQuestion();
-        }
-    }
-
-    function finishQuiz() {
-        document.getElementById('game-area').style.display = 'none';
-        document.getElementById('result-area').style.display = 'block';
-        document.getElementById('final-res').innerText = score;
-    }
-
-    loadData();
+    load();
 </script>
 </body>
 </html>
