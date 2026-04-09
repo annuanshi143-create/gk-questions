@@ -3,76 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SS Samaj Kalyan Prathmic Viddyalay - Quiz Portal</title>
+    <title>SS Samaj Kalyan - Pro Quiz Portal</title>
     <style>
-        :root { --p: #1e3799; --s: #eb2f06; }
-        body { margin: 0; font-family: sans-serif; background: #f4f4f4; text-align: center; }
-        header { background: white; padding: 10px; border-bottom: 5px solid var(--p); }
-        .hero { background: linear-gradient(45deg, var(--p), var(--s)); color: white; padding: 40px 10px; }
-        .container { max-width: 800px; margin: -30px auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-top: 20px; }
-        .sub-btn { padding: 20px; border: none; border-radius: 10px; color: white; font-weight: bold; cursor: pointer; background: var(--p); }
-        #quiz-box { display: none; padding: 20px; }
+        :root { --p: #1e3799; --s: #eb2f06; --light: #f8f9fa; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #f0f2f5; }
+
+        /* Header & Hero */
+        header { background: white; padding: 15px; border-bottom: 5px solid var(--p); text-align: center; }
+        .hero { background: linear-gradient(45deg, var(--p), var(--s)); color: white; padding: 40px 20px; text-align: center; }
+
+        /* Layout Setup: Left Quiz, Right Leaderboard */
+        .main-wrapper {
+            display: flex;
+            max-width: 1200px;
+            margin: -40px auto 40px;
+            gap: 20px;
+            padding: 0 20px;
+        }
+
+        .quiz-section {
+            flex: 2; /* Zyada jagah quiz lega */
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            min-height: 400px;
+        }
+
+        .leaderboard-section {
+            flex: 1; /* Kam jagah leaderboard lega */
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+
+        /* Elements Style */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-top: 20px; }
+        .sub-btn { padding: 15px; border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; background: var(--p); transition: 0.3s; }
+        .sub-btn:hover { background: var(--s); transform: translateY(-3px); }
+
         .options { list-style: none; padding: 0; }
-        .options li { background: #eee; margin: 10px 0; padding: 15px; border-radius: 8px; cursor: pointer; border: 1px solid #ccc; }
-        .options li:hover { background: #ddd; }
-        footer { margin-top: 50px; background: var(--p); color: white; padding: 20px; }
+        .options li { background: var(--light); margin: 10px 0; padding: 15px; border-radius: 8px; cursor: pointer; border: 1px solid #ddd; text-align: left; }
+        .options li:hover { border-color: var(--p); background: #eef2ff; }
+
+        /* Leaderboard Table */
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th { text-align: left; border-bottom: 2px solid var(--p); padding: 10px 5px; color: var(--p); }
+        td { padding: 10px 5px; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+
+        footer { background: var(--p); color: white; padding: 30px; text-align: center; margin-top: 50px; }
+
+        @media (max-width: 800px) {
+            .main-wrapper { flex-direction: column; }
+        }
     </style>
 </head>
 <body>
 
 <header>
-    <h2>SHREE SHIV SAMAJ KALYAN Prathmic</h2>
-    <p> GK Portal</p>
+    <h2 style="margin:0;">SHREE SHIV SAMAJ KALYAN</h2>
+    <p style="margin:5px 0 0;">Azamatgarh, Azamgarh, Uttar Pradesh</p>
 </header>
 
 <div class="hero">
-    <h1>Champion Quiz 🏆</h1>
-    <p id="load-status">Questions Load Ho Rahe Hain...</p>
+    <h1>Champion Quiz Portal 🏆</h1>
+    <p id="status">Questions Load Ho Rahe Hain...</p>
 </div>
 
-<div class="container">
-    <div id="home">
-        <h3> select subject :</h3>
-        <div class="grid" id="subject-menu">
-            </div>
+<div class="main-wrapper">
+    <div class="quiz-section">
+        <div id="home-screen">
+            <h3>Apna Subject Chunein:</h3>
+            <div class="grid" id="subject-menu"></div>
+        </div>
+
+        <div id="quiz-box" style="display:none;">
+            <h2 id="q-text" style="color:var(--p);"></h2>
+            <ul class="options" id="opt-list"></ul>
+            <hr>
+            <p><b>Sawal:</b> <span id="q-count">0</span> | <b>Score:</b> <span id="score">0</span></p>
+        </div>
     </div>
 
-    <div id="quiz-box">
-        <h2 id="q-text"></h2>
-        <ul class="options" id="opt-list"></ul>
-        <p>Score: <span id="score">0</span></p>
+    <div class="leaderboard-section">
+        <h3 style="margin-top:0; color:var(--s);">🏆 Leaderboard</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+            <tbody id="lb-body">
+                </tbody>
+        </table>
     </div>
 </div>
 
-<footer>© 2026 Admin Portal - Azamgarh</footer>
+<footer>© 2026 Admin Portal | Education for All</footer>
 
 <script>
-    // 1. APNA GOOGLE SHEET CSV LINK YAHAN PASTE KAREIN
+    // 1. APNA GOOGLE SHEET CSV LINK YAHAN DALEIN
     const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRD433TB8am9bChCp6xLLHsmJk4V6fuLJw8wRkqz6J0hhvh0H0LafBxAb0yY-i5sSRSQLHtXn5DlpO5/pub?gid=1918837398&single=true&output=csv';
 
     let allData = [];
     let currentQuestions = [];
-    let qIdx = 0, score = 0;
+    let qIdx = 0, score = 0, studentName = "";
 
-    // Google Sheet se data khichne ka function
     async function loadSheetData() {
         try {
             const response = await fetch(sheetURL);
             const data = await response.text();
-            const rows = data.split('\n').slice(1); // Pehli row chhoda
+            const rows = data.split('\n').slice(1);
 
             allData = rows.map(row => {
                 const cols = row.split(',');
                 return {
-                    q: cols[0], a: cols[1], b: cols[2], c: cols[3], d: cols[4], ans: cols[5]?.trim().toLowerCase(), sub: cols[6]?.trim()
+                    q: cols[0], a: cols[1], b: cols[2], c: cols[3], d: cols[4], 
+                    ans: cols[5]?.trim().toLowerCase(), sub: cols[6]?.trim()
                 };
             }).filter(item => item.q);
 
-            document.getElementById('load-status').innerText = "All Questions Updated!";
+            document.getElementById('status').innerText = "Database Connected! ✅";
             renderSubjects();
+            updateLeaderboardDisplay();
         } catch (e) {
-            document.getElementById('load-status').innerText = "Sheet Link Check Karein!";
+            document.getElementById('status').innerText = "Link Error! Check Sheet Settings.";
         }
     }
 
@@ -83,33 +141,65 @@
     }
 
     function startQuiz(sub) {
-        const name = prompt("Apna Naam:");
-        if(!name) return;
-        currentQuestions = allData.filter(item => item.sub === sub).sort(() => Math.random() - 0.5);
-        document.getElementById('home').style.display = 'none';
+        studentName = prompt("Apna Naam Likhiye:");
+        if(!studentName) return;
+        
+        currentQuestions = allData.filter(item => item.sub === sub).sort(() => Math.random() - 0.5).slice(0, 10);
+        qIdx = 0; score = 0;
+        
+        document.getElementById('home-screen').style.display = 'none';
         document.getElementById('quiz-box').style.display = 'block';
-        showQ();
+        showQuestion();
     }
 
-    function showQ() {
+    function showQuestion() {
         const q = currentQuestions[qIdx];
-        if(!q) return alert("Quiz Khatam! Score: " + score) || location.reload();
+        if(!q) return endQuiz();
 
-        document.getElementById('q-text').innerText = q.q;
+        document.getElementById('q-text').innerText = (qIdx + 1) + ". " + q.q;
+        document.getElementById('q-count').innerText = (qIdx + 1) + "/10";
         const list = document.getElementById('opt-list');
         list.innerHTML = `
-            <li onclick="check('a')">${q.a}</li>
-            <li onclick="check('b')">${q.b}</li>
-            <li onclick="check('c')">${q.c}</li>
-            <li onclick="check('d')">${q.d}</li>
+            <li onclick="checkAns('a')"><b>A.</b> ${q.a}</li>
+            <li onclick="checkAns('b')"><b>B.</b> ${q.b}</li>
+            <li onclick="checkAns('c')"><b>C.</b> ${q.c}</li>
+            <li onclick="checkAns('d')"><b>D.</b> ${q.d}</li>
         `;
     }
 
-    function check(choice) {
+    function checkAns(choice) {
         if(choice === currentQuestions[qIdx].ans) score++;
         document.getElementById('score').innerText = score;
         qIdx++;
-        showQ();
+        showQuestion();
+    }
+
+    function endQuiz() {
+        alert("Quiz Poori Hui! " + studentName + ", Aapka Score: " + score);
+        saveScore(studentName, score);
+        location.reload();
+    }
+
+    function saveScore(n, s) {
+        let lb = JSON.parse(localStorage.getItem('ss_scores')) || [];
+        lb.push({ name: n, score: s });
+        lb.sort((a, b) => b.score - a.score);
+        localStorage.setItem('ss_scores', JSON.stringify(lb.slice(0, 10)));
+    }
+
+    function updateLeaderboardDisplay() {
+        const lb = JSON.parse(localStorage.getItem('ss_scores')) || [];
+        const body = document.getElementById('lb-body');
+        if(lb.length === 0) {
+            body.innerHTML = "<tr><td colspan='2'>Abhi tak koi score nahi hai</td></tr>";
+            return;
+        }
+        body.innerHTML = lb.map(item => `
+            <tr>
+                <td>${item.name}</td>
+                <td style="font-weight:bold; color:var(--s);">${item.score} pts</td>
+            </tr>
+        `).join('');
     }
 
     loadSheetData();
