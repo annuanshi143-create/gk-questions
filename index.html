@@ -3,37 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bilingual GK Quiz - SS Samaj Kalyan</title>
+    <title>SS Samaj Kalyan - Bilingual Portal</title>
     <style>
-        :root { --primary: #1e3799; --secondary: #d63031; --bg: #f8f9fa; }
-        body { margin: 0; font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); }
+        :root { --primary: #1e3799; --secondary: #d63031; --bg: #f1f2f6; }
+        body { margin: 0; font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); }
 
-        header { background: #fff; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 5px solid var(--primary); }
-        .hero { background: linear-gradient(rgba(30,55,153,0.8), rgba(30,55,153,0.8)), url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?fit=crop&w=1200&q=80'); 
-                background-size: cover; color: white; padding: 40px 20px; text-align: center; }
+        header { background: white; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 5px solid var(--primary); }
+        .hero { background: linear-gradient(45deg, #1e3799, #d63031); color: white; padding: 40px; text-align: center; }
 
         .main-wrapper { display: flex; max-width: 1200px; margin: -40px auto 40px; gap: 20px; padding: 0 20px; }
-        
         .quiz-section { flex: 2; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; }
         .leaderboard-section { flex: 1; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); height: fit-content; }
 
         .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
-        .sub-btn { padding: 15px; border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; background: var(--primary); transition: 0.3s; text-transform: uppercase; }
+        .sub-btn { padding: 15px; border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; background: var(--primary); transition: 0.3s; }
         .sub-btn:hover { background: #0c2461; transform: scale(1.02); }
 
-        .options-list { list-style: none; padding: 0; margin-top: 25px; }
-        .options-list li { background: #f1f2f6; margin: 12px 0; padding: 15px; border-radius: 10px; cursor: pointer; border: 2px solid transparent; text-align: left; transition: 0.2s; }
-        .options-list li:hover { border-color: var(--primary); background: #eef2ff; }
+        .back-btn { background: #636e72; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-bottom: 20px; float: left; }
 
-        /* Question Text Style */
-        .q-eng { font-size: 1.2rem; color: #2c3e50; font-weight: 600; display: block; margin-bottom: 5px; }
-        .q-hin { font-size: 1.1rem; color: #b21f1f; font-weight: 500; border-top: 1px dashed #ccc; padding-top: 5px; display: block; }
+        .q-box { text-align: left; margin-top: 20px; padding: 15px; border-left: 5px solid var(--primary); background: #f9f9f9; }
+        .q-eng { font-size: 1.2rem; color: #2c3e50; font-weight: bold; display: block; }
+        .q-hin { font-size: 1.1rem; color: #b21f1f; display: block; margin-top: 8px; font-style: italic; }
+
+        .options-list { list-style: none; padding: 0; margin-top: 20px; }
+        .options-list li { background: #eee; margin: 10px 0; padding: 15px; border-radius: 8px; cursor: pointer; transition: 0.2s; text-align: left; border: 1px solid #ccc; }
+        .options-list li:hover { background: #dcdde1; border-color: var(--primary); }
 
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th { text-align: left; border-bottom: 2px solid var(--primary); padding: 10px; color: var(--primary); }
-        td { padding: 10px; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+        th { text-align: left; border-bottom: 2px solid var(--primary); padding: 10px; }
+        td { padding: 10px; border-bottom: 1px solid #eee; }
 
-        footer { background: #2c3e50; color: white; padding: 30px; text-align: center; margin-top: 50px; }
+        footer { background: #2c3e50; color: white; padding: 20px; text-align: center; }
 
         @media (max-width: 850px) { .main-wrapper { flex-direction: column; } }
     </style>
@@ -41,35 +41,40 @@
 <body>
 
 <header>
-    <div style="font-weight: bold; font-size: 1.4rem; color: var(--primary);">SHREE SHIV SAMAJ KALYAN</div>
-    <div id="player-tag" style="color: var(--secondary); font-weight: bold;"></div>
+    <div style="font-weight: bold; font-size: 1.2rem; color: var(--primary);">SHREE SHIV SAMAJ KALYAN</div>
+    <div id="user-name-display" style="font-weight: bold; color: var(--secondary);"></div>
 </header>
 
 <div class="hero">
-    <h1>Bilingual Quiz Portal (हिन्दी & English)</h1>
-    <p>API Based Automatic Question System</p>
+    <h1>Bilingual AI Quiz Portal</h1>
+    <p>English aur Hindi dono bhashao mein automatic sawal</p>
 </div>
 
 <div class="main-wrapper">
     <div class="quiz-section">
-        <div id="setup-screen">
-            <h3>Choose Subject / विषय चुनें:</h3>
+        <div id="home-screen">
+            <h3>Subject Select Karein / विषय चुनें:</h3>
             <div class="btn-grid">
-                <button class="sub-btn" onclick="fetchBilingualQuiz(9)">General Knowledge</button>
-                <button class="sub-btn" onclick="fetchBilingualQuiz(17)">Science / विज्ञान</button>
-                <button class="sub-btn" onclick="fetchBilingualQuiz(18)">Computer / कंप्यूटर</button>
-                <button class="sub-btn" onclick="fetchBilingualQuiz(23)">History / इतिहास</button>
+                <button class="sub-btn" onclick="startQuiz(9)">General Knowledge</button>
+                <button class="sub-btn" onclick="startQuiz(17)">Science (विज्ञान)</button>
+                <button class="sub-btn" onclick="startQuiz(18)">Computer (कंप्यूटर)</button>
+                <button class="sub-btn" onclick="startQuiz(23)">History (इतिहास)</button>
             </div>
         </div>
 
         <div id="quiz-box" style="display:none;">
-            <div id="question-container">
-                <span class="q-eng" id="eng-text"></span>
-                <span class="q-hin" id="hin-text"></span>
+            <button class="back-btn" onclick="goBack()">← Wapas Jayein</button>
+            <div style="clear:both;"></div>
+            
+            <div class="q-box">
+                <span class="q-eng" id="eng-q">Loading Question...</span>
+                <span class="q-hin" id="hin-q">अनुवाद हो रहा है...</span>
             </div>
-            <ul class="options-list" id="opt-container"></ul>
-            <div style="margin-top:20px; padding: 10px; background: #eee; border-radius: 5px;">
-                Score: <span id="score">0</span> | Q: <span id="q-num">1</span>/50
+            
+            <ul class="options-list" id="options"></ul>
+            
+            <div style="margin-top:20px; font-weight:bold;">
+                Score: <span id="score">0</span> | Sawal: <span id="q-num">1</span>/50
             </div>
         </div>
     </div>
@@ -77,64 +82,68 @@
     <div class="leaderboard-section">
         <h3 style="margin-top:0; color:var(--primary);">🏆 Leaderboard</h3>
         <table>
-            <thead><tr><th>Name</th><th>Score</th></tr></thead>
+            <thead><tr><th>Naam</th><th>Score</th></tr></thead>
             <tbody id="lb-body"></tbody>
         </table>
     </div>
 </div>
 
 <footer>
-    <p>© 2026 Admin Portal - Azamgarh | Dual Language Version</p>
+    <p>© 2026 Admin Portal - Azamgarh</p>
 </footer>
 
 <script>
     let questions = [];
     let qIdx = 0;
     let score = 0;
-    let playerName = "";
+    let student = "";
 
-    // Hindi Dictionary for dynamic translation (Demo purposes)
-    const hiMap = {
-        "What": "क्या", "Which": "कौन सा", "Who": "कौन", "Where": "कहाँ", "When": "कब",
-        "India": "भारत", "Science": "विज्ञान", "World": "दुनिया", "Capital": "राजधानी",
-        "is": "है", "the": "", "of": "का/की"
-    };
+    // Sahi Hindi Anuvad ke liye Function (Google Translate Bridge)
+    async function translateText(text) {
+        try {
+            const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=hi&dt=t&q=${encodeURI(text)}`);
+            const data = await res.json();
+            return data[0][0][0];
+        } catch (e) {
+            return "Anuvad uplabdha nahi hai.";
+        }
+    }
 
-    async function fetchBilingualQuiz(cat) {
-        playerName = prompt("Apna Naam Likhein / Enter Name:");
-        if(!playerName) return;
+    async function startQuiz(cat) {
+        student = prompt("Apna Naam Likhein:");
+        if(!student) return;
 
-        document.getElementById('setup-screen').innerHTML = "<h4>Loading 50+ Questions...</h4>";
+        document.getElementById('home-screen').innerHTML = "<h4>Sawal Load Ho Rahe Hain... Kripya Rukein.</h4>";
         
         try {
-            // API se 50 sawal ek sath fetch karna
             const res = await fetch(`https://opentdb.com/api.php?amount=50&category=${cat}&type=multiple`);
             const data = await res.json();
             questions = data.results;
             
-            document.getElementById('setup-screen').style.display = 'none';
+            document.getElementById('home-screen').style.display = 'none';
             document.getElementById('quiz-box').style.display = 'block';
-            document.getElementById('player-tag').innerText = "Player: " + playerName;
+            document.getElementById('user-name-display').innerText = "Player: " + student;
             showQuestion();
         } catch (err) {
-            alert("Error: Internet check karein!");
+            alert("Internet check karein!");
             location.reload();
         }
     }
 
-    function showQuestion() {
+    async function showQuestion() {
         const qData = questions[qIdx];
-        if(!qData) return endQuiz();
+        if(!qData) return finish();
 
-        const engQ = decodeHTML(qData.question);
-        document.getElementById('eng-text').innerText = engQ;
+        const cleanQ = decodeHTML(qData.question);
+        document.getElementById('eng-q').innerText = cleanQ;
+        document.getElementById('hin-q').innerText = "Anuvad ho raha hai...";
         
-        // Simple Hindi Translation (Placeholder - Real translation needs Google API or manual mapping)
-        document.getElementById('hin-text').innerText = "हिन्दी अनुवाद: " + engQ.replace(/\w+/g, w => hiMap[w] || w);
+        // Hindi Translation Call
+        const hindiQ = await translateText(cleanQ);
+        document.getElementById('hin-q').innerText = hindiQ;
 
         let opts = [...qData.incorrect_answers, qData.correct_answer].sort(() => Math.random() - 0.5);
-        
-        const container = document.getElementById('opt-container');
+        const container = document.getElementById('options');
         container.innerHTML = opts.map(opt => `<li onclick="check('${decodeHTML(opt)}', '${decodeHTML(qData.correct_answer)}')">${decodeHTML(opt)}</li>`).join('');
     }
 
@@ -148,21 +157,23 @@
         showQuestion();
     }
 
-    function endQuiz() {
-        alert("Quiz Finished! Final Score: " + score);
-        saveLB(playerName, score);
+    function goBack() {
+        if(confirm("Kya aap quiz chhodkar wapas jana chahte hain?")) {
+            location.reload();
+        }
+    }
+
+    function finish() {
+        alert("Quiz Khatam! Score: " + score);
+        let lb = JSON.parse(localStorage.getItem('ss_bilingual')) || [];
+        lb.push({name: student, score: score});
+        lb.sort((a,b) => b.score - a.score);
+        localStorage.setItem('ss_bilingual', JSON.stringify(lb.slice(0, 10)));
         location.reload();
     }
 
-    function saveLB(n, s) {
-        let lb = JSON.parse(localStorage.getItem('dual_scores')) || [];
-        lb.push({name: n, score: s});
-        lb.sort((a,b) => b.score - a.score);
-        localStorage.setItem('dual_scores', JSON.stringify(lb.slice(0, 10)));
-    }
-
     function loadLB() {
-        const lb = JSON.parse(localStorage.getItem('dual_scores')) || [];
+        const lb = JSON.parse(localStorage.getItem('ss_bilingual')) || [];
         document.getElementById('lb-body').innerHTML = lb.map(i => `<tr><td>${i.name}</td><td><b>${i.score}</b></td></tr>`).join('');
     }
 
