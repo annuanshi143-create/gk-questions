@@ -3,47 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SS Samaj Kalyan - Final Quiz Portal</title>
+    <title>SS Samaj Kalyan - Professional Quiz Portal</title>
     <style>
         :root { --primary: #1e3799; --secondary: #d63031; --bg: #f1f2f6; }
         body { margin: 0; font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); }
-
         header { background: white; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 5px solid var(--primary); }
         .hero { background: linear-gradient(45deg, #1e3799, #d63031); color: white; padding: 30px; text-align: center; }
-
         .main-wrapper { display: flex; max-width: 1200px; margin: -40px auto 40px; gap: 20px; padding: 0 20px; }
         .quiz-section { flex: 2; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; min-height: 550px; }
         .leaderboard-section { flex: 1; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); height: fit-content; }
-
-        .selection-box h3 { color: var(--primary); border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 25px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-top: 15px; }
-        
         .btn { padding: 12px; border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 0.9rem; }
         .class-btn { background: #3498db; }
         .sub-btn { background: #2ecc71; }
-        .comp-btn { background: #8e44ad; grid-column: span 2; }
         .btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-
         .nav-btns { display: flex; justify-content: space-between; margin-bottom: 20px; }
         .back-btn { background: #636e72; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; }
         .next-btn { background: #27ae60; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; display: none; }
-
         .q-box { text-align: left; margin-top: 20px; padding: 15px; border-left: 5px solid var(--primary); background: #f9f9f9; }
         .q-eng { font-size: 1.2rem; color: #2c3e50; font-weight: bold; display: block; }
-        .q-hin { font-size: 1.1rem; color: #b21f1f; display: block; margin-top: 8px; font-style: italic; }
-
+        .q-hin { font-size: 1.1rem; color: #b21f1f; display: block; margin-top: 5px; font-style: italic; }
         .options-list { list-style: none; padding: 0; margin-top: 20px; }
-        .options-list li { background: #eee; margin: 10px 0; padding: 15px; border-radius: 8px; cursor: pointer; transition: 0.2s; text-align: left; border: 1px solid #ccc; }
-        .options-list li.correct { background: #2ecc71 !important; color: white; border-color: #27ae60; }
-        .options-list li.wrong { background: #e74c3c !important; color: white; border-color: #c0392b; }
-
+        .options-list li { background: #eee; margin: 10px 0; padding: 12px; border-radius: 8px; cursor: pointer; transition: 0.2s; text-align: left; border: 1px solid #ccc; font-size: 0.95rem; }
+        .opt-hin { color: #555; display: block; font-size: 0.85rem; border-top: 1px solid #ddd; margin-top: 4px; padding-top: 2px; }
+        .correct { background: #2ecc71 !important; color: white; border-color: #27ae60; }
+        .wrong { background: #e74c3c !important; color: white; border-color: #c0392b; }
         table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; border-bottom: 2px solid var(--primary); padding: 10px; font-size: 0.9rem; }
-        td { padding: 10px; border-bottom: 1px solid #eee; font-size: 0.85rem; }
-
+        th, td { text-align: left; padding: 10px; border-bottom: 1px solid #eee; }
         footer { background: #2c3e50; color: white; padding: 20px; text-align: center; margin-top: 50px; }
-
-        @media (max-width: 850px) { .main-wrapper { flex-direction: column; } .grid { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 850px) { .main-wrapper { flex-direction: column; } }
     </style>
 </head>
 <body>
@@ -54,53 +42,45 @@
 </header>
 
 <div class="hero">
-    <h1>All Classes Digital Quiz</h1>
-    <p>Har Set Mein 10 Sawal - Apni Class aur Subject Chunein</p>
+    <h1>Bilingual Class-Wise Quiz</h1>
+    <p>10 Questions Set | India & International | Grammar Special</p>
 </div>
 
 <div class="main-wrapper">
     <div class="quiz-section">
         <div id="selection-screen">
-            <h3>1. Apni Class Chunein:</h3>
+            <h3>1. Class Chunein:</h3>
             <div class="grid">
-                <button class="btn class-btn" onclick="setSession('1-5', 'easy')">Class 1-5 (Normal)</button>
-                <button class="btn class-btn" onclick="setSession('6-8', 'medium')">Class 6-8</button>
-                <button class="btn class-btn" onclick="setSession('9-10', 'medium')">Class 9-10</button>
-                <button class="btn class-btn" onclick="setSession('11-12', 'hard')">Class 11-12</button>
+                <button class="btn class-btn" onclick="setSession('1-5', 'easy')">Class 1-5 (India Only)</button>
+                <button class="btn class-btn" onclick="setSession('6-8', 'medium')">Class 6-8 (Mix)</button>
+                <button class="btn class-btn" onclick="setSession('9-12', 'hard')">Class 9-12 (Mix)</button>
             </div>
-
-            <h3>2. Vishay (Subject) Chunein:</h3>
+            <h3>2. Subject Chunein:</h3>
             <div class="grid">
-                <button class="btn sub-btn" onclick="startQuiz(9)">India GK</button>
-                <button class="btn sub-btn" onclick="startQuiz(17)">Science</button>
-                <button class="btn sub-btn" style="background:#f39c12" onclick="startQuiz('grammar')">English Grammar</button>
-                <button class="btn sub-btn" style="background:#e67e22" onclick="startQuiz('grammar')">Hindi Grammar</button>
-            </div>
-
-            <h3>3. Competition Level:</h3>
-            <div class="grid">
-                <button class="btn comp-btn" onclick="setSession('Comp', 'hard'); startQuiz(9);">Competition Level (IAS/SSC/UPP)</button>
+                <button class="btn sub-btn" onclick="startQuiz('GK')">GK (India/World)</button>
+                <button class="btn sub-btn" style="background:#f39c12" onclick="startQuiz('ENG')">English Grammar</button>
+                <button class="btn sub-btn" style="background:#e67e22" onclick="startQuiz('HIN')">Hindi Grammar</button>
             </div>
         </div>
 
         <div id="quiz-box" style="display:none;">
             <div class="nav-btns">
-                <button class="back-btn" onclick="location.reload()">← Main Menu</button>
-                <button id="next-btn" class="next-btn" onclick="loadNext()">Next Sawal →</button>
+                <button class="back-btn" onclick="location.reload()">← Menu</button>
+                <button id="next-btn" class="next-btn" onclick="loadNext()">Next →</button>
             </div>
             <div class="q-box">
                 <span class="q-eng" id="eng-q">Loading...</span>
-                <span class="q-hin" id="hin-q">Anuvad ho raha hai...</span>
+                <span class="q-hin" id="hin-q">Loading...</span>
             </div>
             <ul class="options-list" id="options"></ul>
-            <div style="margin-top:20px; font-weight:bold; background:#eee; padding:10px; border-radius:5px;">
-                Score: <span id="score">0</span> | Sawal: <span id="q-num">1</span>/10
+            <div style="margin-top:20px; font-weight:bold;">
+                Sawal: <span id="q-num">1</span>/10 | Score: <span id="score">0</span>
             </div>
         </div>
     </div>
 
     <div class="leaderboard-section">
-        <h3 style="margin-top:0; color:var(--primary);">🏆 Top Students</h3>
+        <h3 style="margin-top:0; color:var(--primary);">🏆 Leaderboard</h3>
         <table>
             <thead><tr><th>Naam</th><th>Class</th><th>Score</th></tr></thead>
             <tbody id="lb-body"></tbody>
@@ -108,18 +88,29 @@
     </div>
 </div>
 
-<footer>
-    <p>© 2026 SS Samaj Kalyan | Educational Portal</p>
-</footer>
+<footer><p>© 2026 SS Samaj Kalyan Portal</p></footer>
 
 <script>
     let questions = [];
     let qIdx = 0, score = 0, student = "", selClass = "", selDiff = "", answered = false;
 
+    // Grammar Questions (Example database)
+    const grammarDB = {
+        'ENG': [
+            {q: "What is the plural of 'Child'?", a: "Children", opts: ["Childs", "Children", "Childrens", "Childes"]},
+            {q: "Which is a Verb?", a: "Run", opts: ["Run", "Apple", "Happy", "Table"]},
+            {q: "Opposite of 'Hot'?", a: "Cold", opts: ["Fire", "Sun", "Cold", "Warm"]}
+        ],
+        'HIN': [
+            {q: "संज्ञा के कितने भेद होते हैं?", a: "5", opts: ["2", "4", "5", "3"]},
+            {q: "शुद्ध वर्तनी चुनें:", a: "आशीर्वाद", opts: ["अशीर्वाद", "आशीर्वाद", "आशिर्वाद", "असीर्वाद"]},
+            {q: "सूर्य का पर्यायवाची है:", a: "दिनकर", opts: ["निशाकर", "दिनकर", "जलज", "पवन"]}
+        ]
+    };
+
     function setSession(c, d) {
-        selClass = c;
-        selDiff = d;
-        alert("Class " + c + " Selected. Ab Subject chunein.");
+        selClass = c; selDiff = d;
+        alert("Class " + c + " Selected!");
     }
 
     async function translate(text) {
@@ -127,27 +118,30 @@
             const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=hi&dt=t&q=${encodeURI(text)}`);
             const data = await res.json();
             return data[0][0][0];
-        } catch (e) { return "Anuvad available nahi hai."; }
+        } catch (e) { return text; }
     }
 
-    async function startQuiz(cat) {
+    async function startQuiz(type) {
         if(!selClass) return alert("Pehle Class Chunein!");
-        student = prompt("Student ka Naam:");
+        student = prompt("Naam Likhein:");
         if(!student) return;
 
-        document.getElementById('selection-screen').innerHTML = "<h4>10 Sawal Taiyaar Ho Rahe Hain...</h4>";
-        
-        try {
-            // Amount=10 set kiya gaya hai
-            const res = await fetch(`https://opentdb.com/api.php?amount=10&category=${cat === 'grammar' ? 9 : cat}&difficulty=${selDiff}&type=multiple`);
+        document.getElementById('selection-screen').innerHTML = "<h4>Sawal Taiyaar Ho Rahe Hain...</h4>";
+
+        if(type === 'GK') {
+            // India only filter for Class 1-5
+            let query = (selClass === '1-5') ? "India" : "";
+            const res = await fetch(`https://opentdb.com/api.php?amount=10&category=9&difficulty=${selDiff}&type=multiple`);
             const data = await res.json();
-            questions = data.results;
-            
-            document.getElementById('selection-screen').style.display = 'none';
-            document.getElementById('quiz-box').style.display = 'block';
-            document.getElementById('user-info').innerText = student + " (Class: " + selClass + ")";
-            showQ();
-        } catch (err) { alert("Internet Check Karein!"); location.reload(); }
+            questions = data.results.map(q => ({q: q.question, a: q.correct_answer, opts: [...q.incorrect_answers, q.correct_answer]}));
+        } else {
+            questions = grammarDB[type].sort(() => Math.random() - 0.5).slice(0, 10);
+        }
+
+        document.getElementById('selection-screen').style.display = 'none';
+        document.getElementById('quiz-box').style.display = 'block';
+        document.getElementById('user-info').innerText = student;
+        showQ();
     }
 
     async function showQ() {
@@ -156,14 +150,24 @@
         const qData = questions[qIdx];
         if(!qData) return finish();
 
-        const cleanQ = decodeHTML(qData.question);
+        const cleanQ = decodeHTML(qData.q);
         document.getElementById('eng-q').innerText = cleanQ;
-        document.getElementById('hin-q').innerText = "Anuvad ho raha hai...";
         document.getElementById('hin-q').innerText = await translate(cleanQ);
 
-        let opts = [...qData.incorrect_answers, qData.correct_answer].sort(() => Math.random() - 0.5);
         const container = document.getElementById('options');
-        container.innerHTML = opts.map(opt => `<li onclick="check('${decodeHTML(opt)}', '${decodeHTML(qData.correct_answer)}', this)">${decodeHTML(opt)}</li>`).join('');
+        container.innerHTML = "";
+
+        // Options ko shuffle karna
+        let shuffledOpts = qData.opts.sort(() => Math.random() - 0.5);
+
+        for (let opt of shuffledOpts) {
+            let cleanOpt = decodeHTML(opt);
+            let hindiOpt = await translate(cleanOpt);
+            let li = document.createElement('li');
+            li.innerHTML = `${cleanOpt} <span class="opt-hin">${hindiOpt}</span>`;
+            li.onclick = () => check(cleanOpt, decodeHTML(qData.a), li);
+            container.appendChild(li);
+        }
     }
 
     function check(sel, cor, el) {
@@ -175,7 +179,7 @@
         } else {
             el.classList.add('wrong');
             Array.from(document.getElementById('options').children).forEach(li => {
-                if(li.innerText === cor) li.classList.add('correct');
+                if(li.innerText.includes(cor)) li.classList.add('correct');
             });
         }
         document.getElementById('score').innerText = score;
@@ -184,26 +188,24 @@
 
     function loadNext() {
         qIdx++;
-        if(qIdx < 10) {
+        if(qIdx < 10 && qIdx < questions.length) {
             document.getElementById('q-num').innerText = qIdx + 1;
             showQ();
-        } else {
-            finish();
-        }
+        } else { finish(); }
     }
 
     function finish() {
         alert("Quiz Khatam! Score: " + score + "/10");
-        let lb = JSON.parse(localStorage.getItem('ss_final_10')) || [];
+        let lb = JSON.parse(localStorage.getItem('ss_bilingual_lb')) || [];
         lb.push({name: student, class: selClass, score: score});
         lb.sort((a,b) => b.score - a.score);
-        localStorage.setItem('ss_final_10', JSON.stringify(lb.slice(0, 10)));
+        localStorage.setItem('ss_bilingual_lb', JSON.stringify(lb.slice(0, 10)));
         location.reload();
     }
 
     function loadLB() {
-        const lb = JSON.parse(localStorage.getItem('ss_final_10')) || [];
-        document.getElementById('lb-body').innerHTML = lb.map(i => `<tr><td>${i.name}</td><td><small>${i.class}</small></td><td><b>${i.score}</b></td></tr>`).join('');
+        const lb = JSON.parse(localStorage.getItem('ss_bilingual_lb')) || [];
+        document.getElementById('lb-body').innerHTML = lb.map(i => `<tr><td>${i.name}</td><td>${i.class}</td><td><b>${i.score}</b></td></tr>`).join('');
     }
 
     function decodeHTML(html) {
