@@ -3,206 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SS Samaj Kalyan - Pro Quiz Portal</title>
+    <title>Global Auto-Quiz Portal</title>
     <style>
-        :root { --p: #1e3799; --s: #eb2f06; --light: #f8f9fa; }
-        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #f0f2f5; }
+        :root { --p: #0984e3; --s: #d63031; --dark: #2d3436; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #dfe6e9; }
 
-        /* Header & Hero */
-        header { background: white; padding: 15px; border-bottom: 5px solid var(--p); text-align: center; }
-        .hero { background: linear-gradient(45deg, var(--p), var(--s)); color: white; padding: 40px 20px; text-align: center; }
+        header { background: white; padding: 15px; border-bottom: 5px solid var(--p); text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .hero { background: linear-gradient(135deg, var(--p), #6c5ce7); color: white; padding: 50px 20px; text-align: center; }
 
-        /* Layout Setup: Left Quiz, Right Leaderboard */
         .main-wrapper {
             display: flex;
             max-width: 1200px;
-            margin: -40px auto 40px;
+            margin: -50px auto 40px;
             gap: 20px;
             padding: 0 20px;
         }
 
         .quiz-section {
-            flex: 2; /* Zyada jagah quiz lega */
+            flex: 2;
             background: white;
             padding: 30px;
             border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            min-height: 400px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
         }
 
         .leaderboard-section {
-            flex: 1; /* Kam jagah leaderboard lega */
+            flex: 1;
             background: white;
             padding: 20px;
             border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             height: fit-content;
         }
 
-        /* Elements Style */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-top: 20px; }
-        .sub-btn { padding: 15px; border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; background: var(--p); transition: 0.3s; }
-        .sub-btn:hover { background: var(--s); transform: translateY(-3px); }
+        .category-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .cat-btn { padding: 15px; border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; background: var(--p); transition: 0.3s; }
+        .cat-btn:hover { background: var(--dark); transform: scale(1.03); }
 
-        .options { list-style: none; padding: 0; }
-        .options li { background: var(--light); margin: 10px 0; padding: 15px; border-radius: 8px; cursor: pointer; border: 1px solid #ddd; text-align: left; }
-        .options li:hover { border-color: var(--p); background: #eef2ff; }
+        .options-list { list-style: none; padding: 0; margin-top: 20px; }
+        .options-list li { background: #f1f2f6; margin: 10px 0; padding: 15px; border-radius: 10px; cursor: pointer; border: 2px solid transparent; transition: 0.2s; text-align: left; }
+        .options-list li:hover { border-color: var(--p); background: #e3f2fd; }
 
-        /* Leaderboard Table */
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th { text-align: left; border-bottom: 2px solid var(--p); padding: 10px 5px; color: var(--p); }
-        td { padding: 10px 5px; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+        th { text-align: left; border-bottom: 2px solid var(--p); padding: 10px; }
+        td { padding: 10px; border-bottom: 1px solid #eee; }
 
-        footer { background: var(--p); color: white; padding: 30px; text-align: center; margin-top: 50px; }
-
-        @media (max-width: 800px) {
-            .main-wrapper { flex-direction: column; }
-        }
+        footer { background: var(--dark); color: white; padding: 30px; text-align: center; }
+        
+        @media (max-width: 850px) { .main-wrapper { flex-direction: column; } }
     </style>
 </head>
 <body>
 
 <header>
     <h2 style="margin:0;">SHREE SHIV SAMAJ KALYAN</h2>
-    <p style="margin:5px 0 0;">Azamatgarh, Azamgarh, Uttar Pradesh</p>
+    <p style="margin:5px 0 0;">Automatic AI Quiz System</p>
 </header>
 
 <div class="hero">
-    <h1>Champion Quiz Portal 🏆</h1>
-    <p id="status">Questions Load Ho Rahe Hain...</p>
+    <h1>Knowledge World 🌍</h1>
+    <p>Har baar naye sawal, har baar naya challenge!</p>
 </div>
 
 <div class="main-wrapper">
     <div class="quiz-section">
-        <div id="home-screen">
+        <div id="setup-screen">
             <h3>Apna Subject Chunein:</h3>
-            <div class="grid" id="subject-menu"></div>
+            <div class="category-grid">
+                <button class="cat-btn" onclick="startAutoQuiz(9)">General Knowledge</button>
+                <button class="cat-btn" onclick="startAutoQuiz(17)">Science & Nature</button>
+                <button class="cat-btn" onclick="startAutoQuiz(18)">Computer Science</button>
+                <button class="cat-btn" onclick="startAutoQuiz(23)">History</button>
+                <button class="cat-btn" onclick="startAutoQuiz(21)">Sports</button>
+                <button class="cat-btn" onclick="startAutoQuiz(22)">Geography</button>
+            </div>
         </div>
 
         <div id="quiz-box" style="display:none;">
-            <h2 id="q-text" style="color:var(--p);"></h2>
-            <ul class="options" id="opt-list"></ul>
-            <hr>
-            <p><b>Sawal:</b> <span id="q-count">0</span> | <b>Score:</b> <span id="score">0</span></p>
+            <h3 id="q-text" style="color:var(--dark); line-height: 1.5;">Sawal loading...</h3>
+            <ul class="options-list" id="opt-container"></ul>
+            <div style="margin-top:20px; font-weight:bold; color:var(--s);">
+                Score: <span id="score">0</span> | Sawal: <span id="q-num">1</span>/10
+            </div>
         </div>
     </div>
 
     <div class="leaderboard-section">
-        <h3 style="margin-top:0; color:var(--s);">🏆 Leaderboard</h3>
+        <h3 style="margin-top:0; color:var(--p);">🏆 Top Students</h3>
         <table>
-            <thead>
-                <tr>
-                    <th>Student</th>
-                    <th>Score</th>
-                </tr>
-            </thead>
-            <tbody id="lb-body">
-                </tbody>
+            <thead><tr><th>Naam</th><th>Score</th></tr></thead>
+            <tbody id="lb-body"></tbody>
         </table>
     </div>
 </div>
 
-<footer>© 2026 Admin Portal | Education for All</footer>
+<footer>
+    <p>© 2026 SS Samaj Kalyan | Educational Gaming Portal</p>
+</footer>
 
 <script>
-    // 1. APNA GOOGLE SHEET CSV LINK YAHAN DALEIN
-    const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRD433TB8am9bChCp6xLLHsmJk4V6fuLJw8wRkqz6J0hhvh0H0LafBxAb0yY-i5sSRSQLHtXn5DlpO5/pub?gid=1918837398&single=true&output=csv';
+    let questions = [];
+    let qIdx = 0;
+    let score = 0;
+    let playerName = "";
 
-    let allData = [];
-    let currentQuestions = [];
-    let qIdx = 0, score = 0, studentName = "";
+    async function startAutoQuiz(catID) {
+        playerName = prompt("Apna Naam Likhein:");
+        if(!playerName) return;
 
-    async function loadSheetData() {
+        document.getElementById('setup-screen').innerHTML = "<h4>Sawal Taiyaar Ho Rahe Hain...</h4>";
+        
         try {
-            const response = await fetch(sheetURL);
-            const data = await response.text();
-            const rows = data.split('\n').slice(1);
-
-            allData = rows.map(row => {
-                const cols = row.split(',');
-                return {
-                    q: cols[0], a: cols[1], b: cols[2], c: cols[3], d: cols[4], 
-                    ans: cols[5]?.trim().toLowerCase(), sub: cols[6]?.trim()
-                };
-            }).filter(item => item.q);
-
-            document.getElementById('status').innerText = "Database Connected! ✅";
-            renderSubjects();
-            updateLeaderboardDisplay();
-        } catch (e) {
-            document.getElementById('status').innerText = "Link Error! Check Sheet Settings.";
+            // Internet API se sawal khichna
+            const res = await fetch(`https://opentdb.com/api.php?amount=10&category=${catID}&type=multiple`);
+            const data = await res.json();
+            questions = data.results;
+            
+            document.getElementById('setup-screen').style.display = 'none';
+            document.getElementById('quiz-box').style.display = 'block';
+            showQuestion();
+        } catch (err) {
+            alert("Internet check karein!");
+            location.reload();
         }
     }
 
-    function renderSubjects() {
-        const subjects = [...new Set(allData.map(item => item.sub))];
-        const menu = document.getElementById('subject-menu');
-        menu.innerHTML = subjects.map(s => `<button class="sub-btn" onclick="startQuiz('${s}')">${s}</button>`).join('');
-    }
-
-    function startQuiz(sub) {
-        studentName = prompt("Apna Naam Likhiye:");
-        if(!studentName) return;
-        
-        currentQuestions = allData.filter(item => item.sub === sub).sort(() => Math.random() - 0.5).slice(0, 10);
-        qIdx = 0; score = 0;
-        
-        document.getElementById('home-screen').style.display = 'none';
-        document.getElementById('quiz-box').style.display = 'block';
-        showQuestion();
-    }
-
     function showQuestion() {
-        const q = currentQuestions[qIdx];
-        if(!q) return endQuiz();
+        const qData = questions[qIdx];
+        if(!qData) return endQuiz();
 
-        document.getElementById('q-text').innerText = (qIdx + 1) + ". " + q.q;
-        document.getElementById('q-count').innerText = (qIdx + 1) + "/10";
-        const list = document.getElementById('opt-list');
-        list.innerHTML = `
-            <li onclick="checkAns('a')"><b>A.</b> ${q.a}</li>
-            <li onclick="checkAns('b')"><b>B.</b> ${q.b}</li>
-            <li onclick="checkAns('c')"><b>C.</b> ${q.c}</li>
-            <li onclick="checkAns('d')"><b>D.</b> ${q.d}</li>
-        `;
+        document.getElementById('q-text').innerHTML = qData.question;
+        document.getElementById('q-num').innerText = qIdx + 1;
+
+        // Answers ko shuffle karna
+        let opts = [...qData.incorrect_answers, qData.correct_answer].sort(() => Math.random() - 0.5);
+        
+        const container = document.getElementById('opt-container');
+        container.innerHTML = opts.map(opt => `<li onclick="checkAnswer('${opt}', '${qData.correct_answer}')">${opt}</li>`).join('');
     }
 
-    function checkAns(choice) {
-        if(choice === currentQuestions[qIdx].ans) score++;
-        document.getElementById('score').innerText = score;
+    function checkAnswer(selected, correct) {
+        if(selected === correct) {
+            score++;
+            document.getElementById('score').innerText = score;
+        }
         qIdx++;
         showQuestion();
     }
 
     function endQuiz() {
-        alert("Quiz Poori Hui! " + studentName + ", Aapka Score: " + score);
-        saveScore(studentName, score);
+        alert("Khel Samapt! " + playerName + ", Aapka Score: " + score);
+        saveLeaderboard(playerName, score);
         location.reload();
     }
 
-    function saveScore(n, s) {
-        let lb = JSON.parse(localStorage.getItem('ss_scores')) || [];
-        lb.push({ name: n, score: s });
-        lb.sort((a, b) => b.score - a.score);
-        localStorage.setItem('ss_scores', JSON.stringify(lb.slice(0, 10)));
+    function saveLeaderboard(n, s) {
+        let lb = JSON.parse(localStorage.getItem('api_scores')) || [];
+        lb.push({name: n, score: s});
+        lb.sort((a,b) => b.score - a.score);
+        localStorage.setItem('api_scores', JSON.stringify(lb.slice(0, 10)));
     }
 
-    function updateLeaderboardDisplay() {
-        const lb = JSON.parse(localStorage.getItem('ss_scores')) || [];
+    function displayLeaderboard() {
+        const lb = JSON.parse(localStorage.getItem('api_scores')) || [];
         const body = document.getElementById('lb-body');
-        if(lb.length === 0) {
-            body.innerHTML = "<tr><td colspan='2'>Abhi tak koi score nahi hai</td></tr>";
-            return;
-        }
-        body.innerHTML = lb.map(item => `
-            <tr>
-                <td>${item.name}</td>
-                <td style="font-weight:bold; color:var(--s);">${item.score} pts</td>
-            </tr>
-        `).join('');
+        body.innerHTML = lb.map(i => `<tr><td>${i.name}</td><td><b>${i.score}</b></td></tr>`).join('');
     }
 
-    loadSheetData();
+    displayLeaderboard();
 </script>
+
 </body>
 </html>
