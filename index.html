@@ -3,103 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global Auto-Quiz Portal</title>
+    <title>Bilingual GK Quiz - SS Samaj Kalyan</title>
     <style>
-        :root { --p: #0984e3; --s: #d63031; --dark: #2d3436; }
-        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #dfe6e9; }
+        :root { --primary: #1e3799; --secondary: #d63031; --bg: #f8f9fa; }
+        body { margin: 0; font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); }
 
-        header { background: white; padding: 15px; border-bottom: 5px solid var(--p); text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .hero { background: linear-gradient(135deg, var(--p), #6c5ce7); color: white; padding: 50px 20px; text-align: center; }
+        header { background: #fff; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 5px solid var(--primary); }
+        .hero { background: linear-gradient(rgba(30,55,153,0.8), rgba(30,55,153,0.8)), url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?fit=crop&w=1200&q=80'); 
+                background-size: cover; color: white; padding: 40px 20px; text-align: center; }
 
-        .main-wrapper {
-            display: flex;
-            max-width: 1200px;
-            margin: -50px auto 40px;
-            gap: 20px;
-            padding: 0 20px;
-        }
+        .main-wrapper { display: flex; max-width: 1200px; margin: -40px auto 40px; gap: 20px; padding: 0 20px; }
+        
+        .quiz-section { flex: 2; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; }
+        .leaderboard-section { flex: 1; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); height: fit-content; }
 
-        .quiz-section {
-            flex: 2;
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            text-align: center;
-        }
+        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .sub-btn { padding: 15px; border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; background: var(--primary); transition: 0.3s; text-transform: uppercase; }
+        .sub-btn:hover { background: #0c2461; transform: scale(1.02); }
 
-        .leaderboard-section {
-            flex: 1;
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            height: fit-content;
-        }
+        .options-list { list-style: none; padding: 0; margin-top: 25px; }
+        .options-list li { background: #f1f2f6; margin: 12px 0; padding: 15px; border-radius: 10px; cursor: pointer; border: 2px solid transparent; text-align: left; transition: 0.2s; }
+        .options-list li:hover { border-color: var(--primary); background: #eef2ff; }
 
-        .category-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
-        .cat-btn { padding: 15px; border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; background: var(--p); transition: 0.3s; }
-        .cat-btn:hover { background: var(--dark); transform: scale(1.03); }
-
-        .options-list { list-style: none; padding: 0; margin-top: 20px; }
-        .options-list li { background: #f1f2f6; margin: 10px 0; padding: 15px; border-radius: 10px; cursor: pointer; border: 2px solid transparent; transition: 0.2s; text-align: left; }
-        .options-list li:hover { border-color: var(--p); background: #e3f2fd; }
+        /* Question Text Style */
+        .q-eng { font-size: 1.2rem; color: #2c3e50; font-weight: 600; display: block; margin-bottom: 5px; }
+        .q-hin { font-size: 1.1rem; color: #b21f1f; font-weight: 500; border-top: 1px dashed #ccc; padding-top: 5px; display: block; }
 
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th { text-align: left; border-bottom: 2px solid var(--p); padding: 10px; }
-        td { padding: 10px; border-bottom: 1px solid #eee; }
+        th { text-align: left; border-bottom: 2px solid var(--primary); padding: 10px; color: var(--primary); }
+        td { padding: 10px; border-bottom: 1px solid #eee; font-size: 0.9rem; }
 
-        footer { background: var(--dark); color: white; padding: 30px; text-align: center; }
-        
+        footer { background: #2c3e50; color: white; padding: 30px; text-align: center; margin-top: 50px; }
+
         @media (max-width: 850px) { .main-wrapper { flex-direction: column; } }
     </style>
 </head>
 <body>
 
 <header>
-    <h2 style="margin:0;">SHREE SHIV SAMAJ KALYAN</h2>
-    <p style="margin:5px 0 0;">Automatic AI Quiz System</p>
+    <div style="font-weight: bold; font-size: 1.4rem; color: var(--primary);">SHREE SHIV SAMAJ KALYAN</div>
+    <div id="player-tag" style="color: var(--secondary); font-weight: bold;"></div>
 </header>
 
 <div class="hero">
-    <h1>Knowledge World 🌍</h1>
-    <p>Har baar naye sawal, har baar naya challenge!</p>
+    <h1>Bilingual Quiz Portal (हिन्दी & English)</h1>
+    <p>API Based Automatic Question System</p>
 </div>
 
 <div class="main-wrapper">
     <div class="quiz-section">
         <div id="setup-screen">
-            <h3>Apna Subject Chunein:</h3>
-            <div class="category-grid">
-                <button class="cat-btn" onclick="startAutoQuiz(9)">General Knowledge</button>
-                <button class="cat-btn" onclick="startAutoQuiz(17)">Science & Nature</button>
-                <button class="cat-btn" onclick="startAutoQuiz(18)">Computer Science</button>
-                <button class="cat-btn" onclick="startAutoQuiz(23)">History</button>
-                <button class="cat-btn" onclick="startAutoQuiz(21)">Sports</button>
-                <button class="cat-btn" onclick="startAutoQuiz(22)">Geography</button>
+            <h3>Choose Subject / विषय चुनें:</h3>
+            <div class="btn-grid">
+                <button class="sub-btn" onclick="fetchBilingualQuiz(9)">General Knowledge</button>
+                <button class="sub-btn" onclick="fetchBilingualQuiz(17)">Science / विज्ञान</button>
+                <button class="sub-btn" onclick="fetchBilingualQuiz(18)">Computer / कंप्यूटर</button>
+                <button class="sub-btn" onclick="fetchBilingualQuiz(23)">History / इतिहास</button>
             </div>
         </div>
 
         <div id="quiz-box" style="display:none;">
-            <h3 id="q-text" style="color:var(--dark); line-height: 1.5;">Sawal loading...</h3>
+            <div id="question-container">
+                <span class="q-eng" id="eng-text"></span>
+                <span class="q-hin" id="hin-text"></span>
+            </div>
             <ul class="options-list" id="opt-container"></ul>
-            <div style="margin-top:20px; font-weight:bold; color:var(--s);">
-                Score: <span id="score">0</span> | Sawal: <span id="q-num">1</span>/10
+            <div style="margin-top:20px; padding: 10px; background: #eee; border-radius: 5px;">
+                Score: <span id="score">0</span> | Q: <span id="q-num">1</span>/50
             </div>
         </div>
     </div>
 
     <div class="leaderboard-section">
-        <h3 style="margin-top:0; color:var(--p);">🏆 Top Students</h3>
+        <h3 style="margin-top:0; color:var(--primary);">🏆 Leaderboard</h3>
         <table>
-            <thead><tr><th>Naam</th><th>Score</th></tr></thead>
+            <thead><tr><th>Name</th><th>Score</th></tr></thead>
             <tbody id="lb-body"></tbody>
         </table>
     </div>
 </div>
 
 <footer>
-    <p>© 2026 SS Samaj Kalyan | Educational Gaming Portal</p>
+    <p>© 2026 Admin Portal - Azamgarh | Dual Language Version</p>
 </footer>
 
 <script>
@@ -108,23 +93,31 @@
     let score = 0;
     let playerName = "";
 
-    async function startAutoQuiz(catID) {
-        playerName = prompt("Apna Naam Likhein:");
+    // Hindi Dictionary for dynamic translation (Demo purposes)
+    const hiMap = {
+        "What": "क्या", "Which": "कौन सा", "Who": "कौन", "Where": "कहाँ", "When": "कब",
+        "India": "भारत", "Science": "विज्ञान", "World": "दुनिया", "Capital": "राजधानी",
+        "is": "है", "the": "", "of": "का/की"
+    };
+
+    async function fetchBilingualQuiz(cat) {
+        playerName = prompt("Apna Naam Likhein / Enter Name:");
         if(!playerName) return;
 
-        document.getElementById('setup-screen').innerHTML = "<h4>Sawal Taiyaar Ho Rahe Hain...</h4>";
+        document.getElementById('setup-screen').innerHTML = "<h4>Loading 50+ Questions...</h4>";
         
         try {
-            // Internet API se sawal khichna
-            const res = await fetch(`https://opentdb.com/api.php?amount=10&category=${catID}&type=multiple`);
+            // API se 50 sawal ek sath fetch karna
+            const res = await fetch(`https://opentdb.com/api.php?amount=50&category=${cat}&type=multiple`);
             const data = await res.json();
             questions = data.results;
             
             document.getElementById('setup-screen').style.display = 'none';
             document.getElementById('quiz-box').style.display = 'block';
+            document.getElementById('player-tag').innerText = "Player: " + playerName;
             showQuestion();
         } catch (err) {
-            alert("Internet check karein!");
+            alert("Error: Internet check karein!");
             location.reload();
         }
     }
@@ -133,45 +126,53 @@
         const qData = questions[qIdx];
         if(!qData) return endQuiz();
 
-        document.getElementById('q-text').innerHTML = qData.question;
-        document.getElementById('q-num').innerText = qIdx + 1;
+        const engQ = decodeHTML(qData.question);
+        document.getElementById('eng-text').innerText = engQ;
+        
+        // Simple Hindi Translation (Placeholder - Real translation needs Google API or manual mapping)
+        document.getElementById('hin-text').innerText = "हिन्दी अनुवाद: " + engQ.replace(/\w+/g, w => hiMap[w] || w);
 
-        // Answers ko shuffle karna
         let opts = [...qData.incorrect_answers, qData.correct_answer].sort(() => Math.random() - 0.5);
         
         const container = document.getElementById('opt-container');
-        container.innerHTML = opts.map(opt => `<li onclick="checkAnswer('${opt}', '${qData.correct_answer}')">${opt}</li>`).join('');
+        container.innerHTML = opts.map(opt => `<li onclick="check('${decodeHTML(opt)}', '${decodeHTML(qData.correct_answer)}')">${decodeHTML(opt)}</li>`).join('');
     }
 
-    function checkAnswer(selected, correct) {
-        if(selected === correct) {
+    function check(sel, cor) {
+        if(sel === cor) {
             score++;
             document.getElementById('score').innerText = score;
         }
         qIdx++;
+        document.getElementById('q-num').innerText = qIdx + 1;
         showQuestion();
     }
 
     function endQuiz() {
-        alert("Khel Samapt! " + playerName + ", Aapka Score: " + score);
-        saveLeaderboard(playerName, score);
+        alert("Quiz Finished! Final Score: " + score);
+        saveLB(playerName, score);
         location.reload();
     }
 
-    function saveLeaderboard(n, s) {
-        let lb = JSON.parse(localStorage.getItem('api_scores')) || [];
+    function saveLB(n, s) {
+        let lb = JSON.parse(localStorage.getItem('dual_scores')) || [];
         lb.push({name: n, score: s});
         lb.sort((a,b) => b.score - a.score);
-        localStorage.setItem('api_scores', JSON.stringify(lb.slice(0, 10)));
+        localStorage.setItem('dual_scores', JSON.stringify(lb.slice(0, 10)));
     }
 
-    function displayLeaderboard() {
-        const lb = JSON.parse(localStorage.getItem('api_scores')) || [];
-        const body = document.getElementById('lb-body');
-        body.innerHTML = lb.map(i => `<tr><td>${i.name}</td><td><b>${i.score}</b></td></tr>`).join('');
+    function loadLB() {
+        const lb = JSON.parse(localStorage.getItem('dual_scores')) || [];
+        document.getElementById('lb-body').innerHTML = lb.map(i => `<tr><td>${i.name}</td><td><b>${i.score}</b></td></tr>`).join('');
     }
 
-    displayLeaderboard();
+    function decodeHTML(html) {
+        let txt = document.createElement("textarea");
+        txt.innerHTML = html;
+        return txt.value;
+    }
+
+    loadLB();
 </script>
 
 </body>
