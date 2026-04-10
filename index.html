@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SS Samaj Kalyan - Junior India GK</title>
+    <title>SS Samaj Kalyan - Final Quiz Portal</title>
     <style>
         :root { --primary: #1e3799; --secondary: #d63031; --bg: #f1f2f6; }
         body { margin: 0; font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); }
@@ -12,13 +12,16 @@
         .hero { background: linear-gradient(45deg, #1e3799, #d63031); color: white; padding: 30px; text-align: center; }
 
         .main-wrapper { display: flex; max-width: 1200px; margin: -40px auto 40px; gap: 20px; padding: 0 20px; }
-        .quiz-section { flex: 2; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; min-height: 500px; }
+        .quiz-section { flex: 2; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; min-height: 550px; }
         .leaderboard-section { flex: 1; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); height: fit-content; }
 
-        .selection-box h3 { color: var(--primary); border-bottom: 2px solid #eee; padding-bottom: 10px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px; margin-top: 20px; }
+        .selection-box h3 { color: var(--primary); border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 25px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-top: 15px; }
         
-        .btn { padding: 15px; border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; background: var(--primary); }
+        .btn { padding: 12px; border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 0.9rem; }
+        .class-btn { background: #3498db; }
+        .sub-btn { background: #2ecc71; }
+        .comp-btn { background: #8e44ad; grid-column: span 2; }
         .btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
 
         .nav-btns { display: flex; justify-content: space-between; margin-bottom: 20px; }
@@ -31,15 +34,16 @@
 
         .options-list { list-style: none; padding: 0; margin-top: 20px; }
         .options-list li { background: #eee; margin: 10px 0; padding: 15px; border-radius: 8px; cursor: pointer; transition: 0.2s; text-align: left; border: 1px solid #ccc; }
-        .options-list li.correct { background: #2ecc71 !important; color: white; }
-        .options-list li.wrong { background: #e74c3c !important; color: white; }
+        .options-list li.correct { background: #2ecc71 !important; color: white; border-color: #27ae60; }
+        .options-list li.wrong { background: #e74c3c !important; color: white; border-color: #c0392b; }
 
         table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; border-bottom: 2px solid var(--primary); padding: 10px; }
-        td { padding: 10px; border-bottom: 1px solid #eee; }
+        th { text-align: left; border-bottom: 2px solid var(--primary); padding: 10px; font-size: 0.9rem; }
+        td { padding: 10px; border-bottom: 1px solid #eee; font-size: 0.85rem; }
 
-        footer { background: #2c3e50; color: white; padding: 20px; text-align: center; }
-        @media (max-width: 850px) { .main-wrapper { flex-direction: column; } }
+        footer { background: #2c3e50; color: white; padding: 20px; text-align: center; margin-top: 50px; }
+
+        @media (max-width: 850px) { .main-wrapper { flex-direction: column; } .grid { grid-template-columns: 1fr 1fr; } }
     </style>
 </head>
 <body>
@@ -50,19 +54,33 @@
 </header>
 
 <div class="hero">
-    <h1>India GK (Class 1-5 Edition)</h1>
-    <p>Bharat ka gyan, chote bachon ke liye aasan!</p>
+    <h1>All Classes Digital Quiz</h1>
+    <p>Har Set Mein 10 Sawal - Apni Class aur Subject Chunein</p>
 </div>
 
 <div class="main-wrapper">
     <div class="quiz-section">
-        <div id="setup-screen">
-            <h3>Pehle Category Chunein:</h3>
+        <div id="selection-screen">
+            <h3>1. Apni Class Chunein:</h3>
             <div class="grid">
-                <button class="btn" onclick="startIndiaQuiz('India')">Start India GK Quiz</button>
-                <button class="btn" style="background:#2ecc71" onclick="startIndiaQuiz('Animals')">Indian Nature & Animals</button>
+                <button class="btn class-btn" onclick="setSession('1-5', 'easy')">Class 1-5 (Normal)</button>
+                <button class="btn class-btn" onclick="setSession('6-8', 'medium')">Class 6-8</button>
+                <button class="btn class-btn" onclick="setSession('9-10', 'medium')">Class 9-10</button>
+                <button class="btn class-btn" onclick="setSession('11-12', 'hard')">Class 11-12</button>
             </div>
-            <p style="margin-top:20px; color:#666;">Ye quiz Class 1st se 5th ke liye 'Normal' level par set hai.</p>
+
+            <h3>2. Vishay (Subject) Chunein:</h3>
+            <div class="grid">
+                <button class="btn sub-btn" onclick="startQuiz(9)">India GK</button>
+                <button class="btn sub-btn" onclick="startQuiz(17)">Science</button>
+                <button class="btn sub-btn" style="background:#f39c12" onclick="startQuiz('grammar')">English Grammar</button>
+                <button class="btn sub-btn" style="background:#e67e22" onclick="startQuiz('grammar')">Hindi Grammar</button>
+            </div>
+
+            <h3>3. Competition Level:</h3>
+            <div class="grid">
+                <button class="btn comp-btn" onclick="setSession('Comp', 'hard'); startQuiz(9);">Competition Level (IAS/SSC/UPP)</button>
+            </div>
         </div>
 
         <div id="quiz-box" style="display:none;">
@@ -76,27 +94,33 @@
             </div>
             <ul class="options-list" id="options"></ul>
             <div style="margin-top:20px; font-weight:bold; background:#eee; padding:10px; border-radius:5px;">
-                Score: <span id="score">0</span> | Sawal: <span id="q-num">1</span>/50
+                Score: <span id="score">0</span> | Sawal: <span id="q-num">1</span>/10
             </div>
         </div>
     </div>
 
     <div class="leaderboard-section">
-        <h3 style="margin-top:0; color:var(--primary);">🏆 Junior Stars</h3>
+        <h3 style="margin-top:0; color:var(--primary);">🏆 Top Students</h3>
         <table>
-            <thead><tr><th>Naam</th><th>Score</th></tr></thead>
+            <thead><tr><th>Naam</th><th>Class</th><th>Score</th></tr></thead>
             <tbody id="lb-body"></tbody>
         </table>
     </div>
 </div>
 
 <footer>
-    <p>© 2026 Admin Portal - Azamgarh | Primary Education</p>
+    <p>© 2026 SS Samaj Kalyan | Educational Portal</p>
 </footer>
 
 <script>
     let questions = [];
-    let qIdx = 0, score = 0, student = "", answered = false;
+    let qIdx = 0, score = 0, student = "", selClass = "", selDiff = "", answered = false;
+
+    function setSession(c, d) {
+        selClass = c;
+        selDiff = d;
+        alert("Class " + c + " Selected. Ab Subject chunein.");
+    }
 
     async function translate(text) {
         try {
@@ -106,24 +130,24 @@
         } catch (e) { return "Anuvad available nahi hai."; }
     }
 
-    async function startIndiaQuiz(keyword) {
-        student = prompt("Student ka naam likhein:");
+    async function startQuiz(cat) {
+        if(!selClass) return alert("Pehle Class Chunein!");
+        student = prompt("Student ka Naam:");
         if(!student) return;
 
-        document.getElementById('setup-screen').innerHTML = "<h4>India se jude aasan sawal khoje ja rahe hain...</h4>";
+        document.getElementById('selection-screen').innerHTML = "<h4>10 Sawal Taiyaar Ho Rahe Hain...</h4>";
         
         try {
-            // Hum 50 sawal fetch karenge, lekin filter lagayenge
-            // Note: API 'easy' mode me Class 1-5 ke liye sahi sawal deti hai
-            const res = await fetch(`https://opentdb.com/api.php?amount=50&category=9&difficulty=easy&type=multiple`);
+            // Amount=10 set kiya gaya hai
+            const res = await fetch(`https://opentdb.com/api.php?amount=10&category=${cat === 'grammar' ? 9 : cat}&difficulty=${selDiff}&type=multiple`);
             const data = await res.json();
             questions = data.results;
-
-            document.getElementById('setup-screen').style.display = 'none';
+            
+            document.getElementById('selection-screen').style.display = 'none';
             document.getElementById('quiz-box').style.display = 'block';
-            document.getElementById('user-info').innerText = "Student: " + student + " (Class 1-5)";
+            document.getElementById('user-info').innerText = student + " (Class: " + selClass + ")";
             showQ();
-        } catch (err) { alert("Internet error!"); location.reload(); }
+        } catch (err) { alert("Internet Check Karein!"); location.reload(); }
     }
 
     async function showQ() {
@@ -160,22 +184,26 @@
 
     function loadNext() {
         qIdx++;
-        document.getElementById('q-num').innerText = qIdx + 1;
-        showQ();
+        if(qIdx < 10) {
+            document.getElementById('q-num').innerText = qIdx + 1;
+            showQ();
+        } else {
+            finish();
+        }
     }
 
     function finish() {
-        alert("Quiz Poori Hui! Score: " + score);
-        let lb = JSON.parse(localStorage.getItem('ss_jr_lb')) || [];
-        lb.push({name: student, score: score});
+        alert("Quiz Khatam! Score: " + score + "/10");
+        let lb = JSON.parse(localStorage.getItem('ss_final_10')) || [];
+        lb.push({name: student, class: selClass, score: score});
         lb.sort((a,b) => b.score - a.score);
-        localStorage.setItem('ss_jr_lb', JSON.stringify(lb.slice(0, 10)));
+        localStorage.setItem('ss_final_10', JSON.stringify(lb.slice(0, 10)));
         location.reload();
     }
 
     function loadLB() {
-        const lb = JSON.parse(localStorage.getItem('ss_jr_lb')) || [];
-        document.getElementById('lb-body').innerHTML = lb.map(i => `<tr><td>${i.name}</td><td><b>${i.score}</b></td></tr>`).join('');
+        const lb = JSON.parse(localStorage.getItem('ss_final_10')) || [];
+        document.getElementById('lb-body').innerHTML = lb.map(i => `<tr><td>${i.name}</td><td><small>${i.class}</small></td><td><b>${i.score}</b></td></tr>`).join('');
     }
 
     function decodeHTML(html) {
