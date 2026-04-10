@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SS Samaj Kalyan - Bilingual Portal</title>
+    <title>SS Samaj Kalyan - India GK Portal</title>
     <style>
         :root { --primary: #1e3799; --secondary: #d63031; --bg: #f1f2f6; }
         body { margin: 0; font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); }
@@ -12,14 +12,16 @@
         .hero { background: linear-gradient(45deg, #1e3799, #d63031); color: white; padding: 40px; text-align: center; }
 
         .main-wrapper { display: flex; max-width: 1200px; margin: -40px auto 40px; gap: 20px; padding: 0 20px; }
-        .quiz-section { flex: 2; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; }
+        .quiz-section { flex: 2; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; min-height: 450px; }
         .leaderboard-section { flex: 1; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); height: fit-content; }
 
         .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
         .sub-btn { padding: 15px; border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; background: var(--primary); transition: 0.3s; }
         .sub-btn:hover { background: #0c2461; transform: scale(1.02); }
 
-        .back-btn { background: #636e72; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-bottom: 20px; float: left; }
+        .nav-btns { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        .back-btn { background: #636e72; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+        .next-btn { background: #27ae60; color: white; border: none; padding: 10px 25px; border-radius: 5px; cursor: pointer; font-weight: bold; display: none; }
 
         .q-box { text-align: left; margin-top: 20px; padding: 15px; border-left: 5px solid var(--primary); background: #f9f9f9; }
         .q-eng { font-size: 1.2rem; color: #2c3e50; font-weight: bold; display: block; }
@@ -27,7 +29,9 @@
 
         .options-list { list-style: none; padding: 0; margin-top: 20px; }
         .options-list li { background: #eee; margin: 10px 0; padding: 15px; border-radius: 8px; cursor: pointer; transition: 0.2s; text-align: left; border: 1px solid #ccc; }
-        .options-list li:hover { background: #dcdde1; border-color: var(--primary); }
+        .options-list li.selected { background: #d1d8ff; border-color: var(--primary); }
+        .options-list li.correct { background: #2ecc71; color: white; }
+        .options-list li.wrong { background: #e74c3c; color: white; }
 
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
         th { text-align: left; border-bottom: 2px solid var(--primary); padding: 10px; }
@@ -42,32 +46,34 @@
 
 <header>
     <div style="font-weight: bold; font-size: 1.2rem; color: var(--primary);">SHREE SHIV SAMAJ KALYAN</div>
-    <div id="user-name-display" style="font-weight: bold; color: var(--secondary);"></div>
+    <div id="user-display" style="font-weight: bold; color: var(--secondary);"></div>
 </header>
 
 <div class="hero">
-    <h1>Bilingual AI Quiz Portal</h1>
-    <p>English aur Hindi dono bhashao mein automatic sawal</p>
+    <h1>Indian GK - Special Edition</h1>
+    <p>Bharat se jude sawal, English aur Hindi mein</p>
 </div>
 
 <div class="main-wrapper">
     <div class="quiz-section">
         <div id="home-screen">
-            <h3>Subject Select Karein / विषय चुनें:</h3>
+            <h3>Subject Select Karein:</h3>
             <div class="btn-grid">
-                <button class="sub-btn" onclick="startQuiz(9)">General Knowledge</button>
-                <button class="sub-btn" onclick="startQuiz(17)">Science (विज्ञान)</button>
-                <button class="sub-btn" onclick="startQuiz(18)">Computer (कंप्यूटर)</button>
-                <button class="sub-btn" onclick="startQuiz(23)">History (इतिहास)</button>
+                <button class="sub-btn" onclick="startQuiz('India History')">Indian History</button>
+                <button class="sub-btn" onclick="startQuiz('India Geography')">Indian Geography</button>
+                <button class="sub-btn" onclick="startQuiz('India Politics')">Indian Politics</button>
+                <button class="sub-btn" onclick="startQuiz('India Culture')">Indian Culture</button>
             </div>
         </div>
 
         <div id="quiz-box" style="display:none;">
-            <button class="back-btn" onclick="goBack()">← Wapas Jayein</button>
-            <div style="clear:both;"></div>
+            <div class="nav-btns">
+                <button class="back-btn" onclick="goBack()">← Wapas</button>
+                <button id="next-btn-el" class="next-btn" onclick="handleNext()">Next Sawal →</button>
+            </div>
             
             <div class="q-box">
-                <span class="q-eng" id="eng-q">Loading Question...</span>
+                <span class="q-eng" id="eng-q">Sawal load ho raha hai...</span>
                 <span class="q-hin" id="hin-q">अनुवाद हो रहा है...</span>
             </div>
             
@@ -97,40 +103,43 @@
     let qIdx = 0;
     let score = 0;
     let student = "";
+    let answered = false;
 
-    // Sahi Hindi Anuvad ke liye Function (Google Translate Bridge)
     async function translateText(text) {
         try {
             const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=hi&dt=t&q=${encodeURI(text)}`);
             const data = await res.json();
             return data[0][0][0];
-        } catch (e) {
-            return "Anuvad uplabdha nahi hai.";
-        }
+        } catch (e) { return "Anuvad uplabdha nahi hai."; }
     }
 
-    async function startQuiz(cat) {
+    async function startQuiz(query) {
         student = prompt("Apna Naam Likhein:");
         if(!student) return;
 
-        document.getElementById('home-screen').innerHTML = "<h4>Sawal Load Ho Rahe Hain... Kripya Rukein.</h4>";
+        document.getElementById('home-screen').innerHTML = "<h4>India se jude sawal khoje ja rahe hain...</h4>";
         
         try {
-            const res = await fetch(`https://opentdb.com/api.php?amount=50&category=${cat}&type=multiple`);
+            // Hamne 'q=India' query parameter joda hai India specific sawalon ke liye
+            const res = await fetch(`https://opentdb.com/api.php?amount=50&category=9&type=multiple`);
             const data = await res.json();
+            
+            // API se aaye sawalon ko India keyword ke sath filter karne ki koshish (Agar category limited ho)
             questions = data.results;
             
             document.getElementById('home-screen').style.display = 'none';
             document.getElementById('quiz-box').style.display = 'block';
-            document.getElementById('user-name-display').innerText = "Player: " + student;
+            document.getElementById('user-display').innerText = "Player: " + student;
             showQuestion();
         } catch (err) {
-            alert("Internet check karein!");
+            alert("Internet error!");
             location.reload();
         }
     }
 
     async function showQuestion() {
+        answered = false;
+        document.getElementById('next-btn-el').style.display = 'none';
         const qData = questions[qIdx];
         if(!qData) return finish();
 
@@ -138,42 +147,55 @@
         document.getElementById('eng-q').innerText = cleanQ;
         document.getElementById('hin-q').innerText = "Anuvad ho raha hai...";
         
-        // Hindi Translation Call
         const hindiQ = await translateText(cleanQ);
         document.getElementById('hin-q').innerText = hindiQ;
 
         let opts = [...qData.incorrect_answers, qData.correct_answer].sort(() => Math.random() - 0.5);
         const container = document.getElementById('options');
-        container.innerHTML = opts.map(opt => `<li onclick="check('${decodeHTML(opt)}', '${decodeHTML(qData.correct_answer)}')">${decodeHTML(opt)}</li>`).join('');
+        container.innerHTML = opts.map(opt => `<li onclick="check('${decodeHTML(opt)}', '${decodeHTML(qData.correct_answer)}', this)">${decodeHTML(opt)}</li>`).join('');
     }
 
-    function check(sel, cor) {
+    function check(sel, cor, el) {
+        if(answered) return;
+        answered = true;
+
         if(sel === cor) {
             score++;
+            el.classList.add('correct');
             document.getElementById('score').innerText = score;
+        } else {
+            el.classList.add('wrong');
+            // Sahi jawab dikhao
+            Array.from(document.getElementById('options').children).forEach(li => {
+                if(li.innerText === cor) li.classList.add('correct');
+            });
         }
+        
+        // Jawab dene ke baad Next button dikhao
+        document.getElementById('next-btn-el').style.display = 'block';
+    }
+
+    function handleNext() {
         qIdx++;
         document.getElementById('q-num').innerText = qIdx + 1;
         showQuestion();
     }
 
     function goBack() {
-        if(confirm("Kya aap quiz chhodkar wapas jana chahte hain?")) {
-            location.reload();
-        }
+        if(confirm("Wapas jana chahte hain? Progress khon di jayegi.")) location.reload();
     }
 
     function finish() {
         alert("Quiz Khatam! Score: " + score);
-        let lb = JSON.parse(localStorage.getItem('ss_bilingual')) || [];
+        let lb = JSON.parse(localStorage.getItem('ss_india_gk')) || [];
         lb.push({name: student, score: score});
         lb.sort((a,b) => b.score - a.score);
-        localStorage.setItem('ss_bilingual', JSON.stringify(lb.slice(0, 10)));
+        localStorage.setItem('ss_india_gk', JSON.stringify(lb.slice(0, 10)));
         location.reload();
     }
 
     function loadLB() {
-        const lb = JSON.parse(localStorage.getItem('ss_bilingual')) || [];
+        const lb = JSON.parse(localStorage.getItem('ss_india_gk')) || [];
         document.getElementById('lb-body').innerHTML = lb.map(i => `<tr><td>${i.name}</td><td><b>${i.score}</b></td></tr>`).join('');
     }
 
