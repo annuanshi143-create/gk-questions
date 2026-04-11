@@ -3,194 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SS Samaj Kalyan - Professional Quiz Portal</title>
+    <title>SS Samaj Kalyan | Hybrid Quiz Portal</title>
     <style>
-        :root { --primary: #1e3799; --secondary: #d63031; --bg: #f1f2f6; }
-        body { margin: 0; font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); }
-        header { background: white; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 5px solid var(--primary); }
-        .hero { background: linear-gradient(45deg, #1e3799, #d63031); color: white; padding: 30px; text-align: center; }
-        .main-wrapper { display: flex; max-width: 1200px; margin: -40px auto 40px; gap: 20px; padding: 0 20px; }
-        .quiz-section { flex: 2; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; min-height: 550px; }
-        .leaderboard-section { flex: 1; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); height: fit-content; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-top: 15px; }
-        .btn { padding: 12px; border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 0.9rem; }
-        .class-btn { background: #3498db; }
-        .sub-btn { background: #2ecc71; }
-        .btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-        .nav-btns { display: flex; justify-content: space-between; margin-bottom: 20px; }
-        .back-btn { background: #636e72; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; }
-        .next-btn { background: #27ae60; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; display: none; }
-        .q-box { text-align: left; margin-top: 20px; padding: 15px; border-left: 5px solid var(--primary); background: #f9f9f9; }
-        .q-eng { font-size: 1.2rem; color: #2c3e50; font-weight: bold; display: block; }
-        .q-hin { font-size: 1.1rem; color: #b21f1f; display: block; margin-top: 5px; font-style: italic; }
-        .options-list { list-style: none; padding: 0; margin-top: 20px; }
-        .options-list li { background: #eee; margin: 10px 0; padding: 12px; border-radius: 8px; cursor: pointer; transition: 0.2s; text-align: left; border: 1px solid #ccc; font-size: 0.95rem; }
-        .opt-hin { color: #555; display: block; font-size: 0.85rem; border-top: 1px solid #ddd; margin-top: 4px; padding-top: 2px; }
-        .correct { background: #2ecc71 !important; color: white; border-color: #27ae60; }
-        .wrong { background: #e74c3c !important; color: white; border-color: #c0392b; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { text-align: left; padding: 10px; border-bottom: 1px solid #eee; }
-        footer { background: #2c3e50; color: white; padding: 20px; text-align: center; margin-top: 50px; }
-        @media (max-width: 850px) { .main-wrapper { flex-direction: column; } }
+        :root { --primary: #1e3799; --accent: #d63031; --bg: #f1f2f6; --success: #27ae60; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #2d3436; }
+        
+        header { background: white; padding: 15px 5%; display: flex; justify-content: space-between; border-bottom: 4px solid var(--primary); box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .hero { background: linear-gradient(135deg, var(--primary), #0984e3); color: white; padding: 40px 20px; text-align: center; margin-bottom: 20px; }
+
+        .container { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr; gap: 20px; padding: 20px; }
+        
+        .quiz-card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin: 20px 0; }
+        
+        .btn { padding: 15px; border: none; border-radius: 10px; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-class { background: #3498db; }
+        .btn-sub { background: #2ecc71; }
+        .btn:hover { transform: translateY(-3px); opacity: 0.9; }
+
+        .q-text { font-size: 1.4rem; font-weight: bold; color: var(--primary); margin-bottom: 10px; text-align: left; }
+        .q-hin { font-size: 1.1rem; color: var(--accent); font-style: italic; margin-bottom: 25px; text-align: left; display: block; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; list-style: none; padding: 0; }
+        .options-grid li { background: #f8f9fa; padding: 15px; border-radius: 10px; border: 2px solid #eee; cursor: pointer; transition: 0.2s; text-align: left; position: relative; }
+        .options-grid li:hover { border-color: var(--primary); background: #edf2f7; }
+        .correct { background: var(--success) !important; color: white !important; border-color: #219150 !important; }
+        .wrong { background: var(--accent) !important; color: white !important; border-color: #a32424 !important; }
+
+        #next-btn { background: var(--primary); width: 100%; margin-top: 20px; display: none; padding: 18px; font-size: 1.1rem; }
+        
+        .leaderboard { background: white; padding: 20px; border-radius: 15px; height: fit-content; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 12px; border-bottom: 1px solid #eee; text-align: left; font-size: 0.9rem; }
+
+        @media (max-width: 800px) { .container { grid-template-columns: 1fr; } .options-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
 <header>
-    <div style="font-weight: bold; font-size: 1.2rem; color: var(--primary);">SHREE SHIV SAMAJ KALYAN</div>
-    <div id="user-info" style="font-weight: bold; color: var(--secondary);"></div>
+    <div style="font-size: 1.4rem; font-weight: 800; color: var(--primary);">SHREE SHIV SAMAJ KALYAN</div>
+    <div id="student-tag" style="font-weight: bold; color: var(--accent);"></div>
 </header>
 
 <div class="hero">
-    <h1>Bilingual Class-Wise Quiz</h1>
-    <p>10 Questions Set | India & International | Grammar Special</p>
+    <h1>Hybrid Digital Quiz Portal</h1>
+    <p>API for GK | Google Sheets for Grammar</p>
 </div>
 
-<div class="main-wrapper">
-    <div class="quiz-section">
-        <div id="selection-screen">
-            <h3>1. Class Chunein:</h3>
+<div class="container">
+    <div class="quiz-card">
+        <div id="menu">
+            <h3 style="text-align:left;">1. Class Chunein</h3>
             <div class="grid">
-                <button class="btn class-btn" onclick="setSession('1-5', 'easy')">Class 1-5 (India Only)</button>
-                <button class="btn class-btn" onclick="setSession('6-8', 'medium')">Class 6-8 (Mix)</button>
-                <button class="btn class-btn" onclick="setSession('9-12', 'hard')">Class 9-12 (Mix)</button>
+                <button class="btn btn-class" onclick="selC('1-5', 'easy')">Class 1-5</button>
+                <button class="btn btn-class" onclick="selC('6-8', 'medium')">Class 6-8</button>
+                <button class="btn btn-class" onclick="selC('9-12', 'hard')">Class 9-12</button>
             </div>
-            <h3>2. Subject Chunein:</h3>
+            <h3 style="text-align:left;">2. Subject Chunein</h3>
             <div class="grid">
-                <button class="btn sub-btn" onclick="startQuiz('GK')">GK (India/World)</button>
-                <button class="btn sub-btn" style="background:#f39c12" onclick="startQuiz('ENG')">English Grammar</button>
-                <button class="btn sub-btn" style="background:#e67e22" onclick="startQuiz('HIN')">Hindi Grammar</button>
+                <button class="btn btn-sub" onclick="startQuiz('GK')">GK (API)</button>
+                <button class="btn btn-sub" style="background:#6c5ce7" onclick="startQuiz('ENG')">English (Sheet)</button>
+                <button class="btn btn-sub" style="background:#fd9644" onclick="startQuiz('HIN')">Hindi (Sheet)</button>
             </div>
         </div>
 
-        <div id="quiz-box" style="display:none;">
-            <div class="nav-btns">
-                <button class="back-btn" onclick="location.reload()">← Menu</button>
-                <button id="next-btn" class="next-btn" onclick="loadNext()">Next →</button>
+        <div id="quiz-area" style="display:none;">
+            <div id="question-container">
+                <div class="q-text" id="q-en">Loading...</div>
+                <div class="q-hin" id="q-hi">Loading translation...</div>
+                <ul class="options-grid" id="opt-list"></ul>
             </div>
-            <div class="q-box">
-                <span class="q-eng" id="eng-q">Loading...</span>
-                <span class="q-hin" id="hin-q">Loading...</span>
-            </div>
-            <ul class="options-list" id="options"></ul>
-            <div style="margin-top:20px; font-weight:bold;">
-                Sawal: <span id="q-num">1</span>/10 | Score: <span id="score">0</span>
-            </div>
+            <button id="next-btn" class="btn" onclick="nextQ()">Next Sawal →</button>
+            <div style="margin-top:20px; font-weight:bold;">Sawal: <span id="count">1</span>/10 | Score: <span id="score">0</span></div>
         </div>
     </div>
 
-    <div class="leaderboard-section">
-        <h3 style="margin-top:0; color:var(--primary);">🏆 Leaderboard</h3>
+    <div class="leaderboard">
+        <h3 style="margin-top:0;">🏆 Top Scorers</h3>
         <table>
             <thead><tr><th>Naam</th><th>Class</th><th>Score</th></tr></thead>
-            <tbody id="lb-body"></tbody>
+            <tbody id="lb-data"></tbody>
         </table>
     </div>
 </div>
 
-<footer><p>© 2026 SS Samaj Kalyan Portal</p></footer>
-
 <script>
-    let questions = [];
-    let qIdx = 0, score = 0, student = "", selClass = "", selDiff = "", answered = false;
+    // YAHAN APNA GOOGLE SHEET CSV LINK DALEIN
+    const SHEET_URL = 'YOUR_CSV_LINK_HERE';
 
-    // Grammar Questions (Example database)
-    const grammarDB = {
-        'ENG': [
-            {q: "What is the plural of 'Child'?", a: "Children", opts: ["Childs", "Children", "Childrens", "Childes"]},
-            {q: "Which is a Verb?", a: "Run", opts: ["Run", "Apple", "Happy", "Table"]},
-            {q: "Opposite of 'Hot'?", a: "Cold", opts: ["Fire", "Sun", "Cold", "Warm"]}
-        ],
-        'HIN': [
-            {q: "संज्ञा के कितने भेद होते हैं?", a: "5", opts: ["2", "4", "5", "3"]},
-            {q: "शुद्ध वर्तनी चुनें:", a: "आशीर्वाद", opts: ["अशीर्वाद", "आशीर्वाद", "आशिर्वाद", "असीर्वाद"]},
-            {q: "सूर्य का पर्यायवाची है:", a: "दिनकर", opts: ["निशाकर", "दिनकर", "जलज", "पवन"]}
-            {q: "संज्ञा के कितने भेद होते हैं?", a: "5", opts: ["2", "4", "5", "3"]},
-            {q: "सर्वनाम के कितने भेद होते हैं?", a: "6", opts: ["4", "5", "6", "8"]},
-            {q: "विशेषण के कितने मुख्य भेद हैं?", a: "4", opts: ["3", "4", "5", "6"]},
-            {q: "हिंदी वर्णमाला में कुल कितने स्वर होते हैं?", a: "11", opts: ["10", "11", "13", "12"]},
-            {q: "क्रिया के कितने मुख्य भेद होते हैं?", a: "2", opts: ["2", "3", "4", "5"]},
-            {q: "'हिमालय' शब्द में कौन-सी संज्ञा है?", a: "व्यक्तिवाचक", opts: ["जातिवाचक", "व्यक्तिवाचक", "भाववाचक", "समूहवाचक"]},
-            {q: "'लड़का' शब्द में कौन-सी संज्ञा है?", a: "जातिवाचक", opts: ["व्यक्तिवाचक", "जातिवाचक", "भाववाचक", "द्रव्यवाचक"]},
-            {q: "मिठास' शब्द में कौन-सी संज्ञा है?", a: "भाववाचक", opts: ["जातिवाचक", "व्यक्तिवाचक", "भाववाचक", "समूहवाचक"]},
-            {q: "पुरुषवाचक सर्वनाम के कितने प्रकार होते हैं?", a: "3", opts: ["2", "3", "4", "5"]},
-            {q: "'वह' कौन-सा सर्वनाम है?", a: "निश्चयवाचक", opts: ["निश्चयवाचक", "अनिश्चयवाचक", "निजवाचक", "संबंधवाचक"]},
-            {q: "जो शब्द संज्ञा की विशेषता बताते हैं, उन्हें क्या कहते हैं?", a: "विशेषण", opts: ["सर्वनाम", "विशेषण", "क्रिया", "अव्यय"]},
-            {q: "वर्णों के व्यवस्थित समूह को क्या कहते हैं?", a: "वर्णमाला", opts: ["शब्द", "वाक्य", "वर्णमाला", "पद"]},
-            {q: "स्वर संधि के कितने भेद होते हैं?", a: "5", opts: ["3", "4", "5", "6"]},
-            {q: "लंबोदर' में कौन-सा समास है?", a: "बहुव्रीहि", opts: ["तत्पुरुष", "द्विगु", "द्वंद्व", "बहुव्रीहि"]},
-            {q: "आजन्म' शब्द में कौन-सा समास है?", a: "अव्ययीभाव", opts: ["कर्मधारय", "द्विगु", "अव्ययीभाव", "तत्पुरुष"]},
-            {q: "शुद्ध वर्तनी का चयन कीजिए:", a: "आशीर्वाद", opts: ["अशर्वाद", "आशीर्वाद", "आशिर्वाद", "अशीर्वाद"]},
-            {q: "आकाश' का पर्यायवाची शब्द क्या है?", a: "गगन", opts: ["जलद", "गगन", "नीरज", "पावक"]},
-            {q: "पृथ्वी' का विलोम शब्द क्या है?", a: "आकाश", opts: ["गगन", "आकाश", "पाताल", "अंबर"]}
-            {q: "जो पढ़ा न जा सके' वाक्यांश के लिए एक शब्द है:", a: "अपठनीय", opts: ["अगम्य", "अपठनीय", "अमर", "अजर"]},
-            {q: "पवन' का संधि विच्छेद क्या होगा?", a: "पो + अन", opts: ["प + वन", "पौ + अन", "पो + अन", "पा + वन"]}
-        ]
-    };
+    let sheetData = [];
+    let currentPool = [];
+    let qIdx = 0, score = 0, studentName = "", selectedClass = "", selectedDiff = "", answered = false;
 
-    function setSession(c, d) {
-        selClass = c; selDiff = d;
-        alert("Class " + c + " Selected!");
+    // Sheet se data load karna
+    async function loadSheet() {
+        try {
+            const res = await fetch(SHEET_URL);
+            const text = await res.text();
+            const rows = text.split('\n').slice(1);
+            sheetData = rows.map(r => {
+                const c = r.split(',');
+                return { q: c[0], a: c[1], opts: [c[1], c[2], c[3], c[4]], sub: c[5]?.trim() };
+            });
+        } catch (e) { console.log("Sheet connecting..."); }
     }
 
-    async function translate(text) {
+    function selC(c, d) { selectedClass = c; selectedDiff = d; alert("Class " + c + " Set!"); }
+
+    async function getHi(txt) {
         try {
-            const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=hi&dt=t&q=${encodeURI(text)}`);
+            const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=hi&dt=t&q=${encodeURI(txt)}`);
             const data = await res.json();
             return data[0][0][0];
-        } catch (e) { return text; }
+        } catch(e) { return txt; }
     }
 
     async function startQuiz(type) {
-        if(!selClass) return alert("Pehle Class Chunein!");
-        student = prompt("Naam Likhein:");
-        if(!student) return;
+        if(!selectedClass) return alert("Pehle Class Chunein!");
+        studentName = prompt("Student ka naam:");
+        if(!studentName) return;
 
-        document.getElementById('selection-screen').innerHTML = "<h4>Sawal Taiyaar Ho Rahe Hain...</h4>";
+        document.getElementById('menu').innerHTML = "<h3>🔄 Sawal taiyaar ho rahe hain...</h3>";
 
         if(type === 'GK') {
-            // India only filter for Class 1-5
-            let query = (selClass === '1-5') ? "India" : "";
-            const res = await fetch(`https://opentdb.com/api.php?amount=10&category=9&difficulty=${selDiff}&type=multiple`);
+            // API CALL
+            const res = await fetch(`https://opentdb.com/api.php?amount=10&category=9&difficulty=${selectedDiff}&type=multiple`);
             const data = await res.json();
-            questions = data.results.map(q => ({q: q.question, a: q.correct_answer, opts: [...q.incorrect_answers, q.correct_answer]}));
+            currentPool = data.results.map(i => ({ q: i.question, a: i.correct_answer, opts: [...i.incorrect_answers, i.correct_answer] }));
         } else {
-            questions = grammarDB[type].sort(() => Math.random() - 0.5).slice(0, 10);
+            // SHEET CALL
+            currentPool = sheetData.filter(i => i.sub === type).sort(() => 0.5 - Math.random()).slice(0, 10);
+            if(currentPool.length === 0) {
+                alert("Sheet me data nahi mila! Code me diye demo sawal load honge.");
+                currentPool = [{q: "Sample Question?", a: "Ans1", opts: ["Ans1", "Ans2", "Ans3", "Ans4"]}];
+            }
         }
 
-        document.getElementById('selection-screen').style.display = 'none';
-        document.getElementById('quiz-box').style.display = 'block';
-        document.getElementById('user-info').innerText = student;
+        document.getElementById('menu').style.display = 'none';
+        document.getElementById('quiz-area').style.display = 'block';
+        document.getElementById('student-tag').innerText = studentName;
         showQ();
     }
 
     async function showQ() {
         answered = false;
         document.getElementById('next-btn').style.display = 'none';
-        const qData = questions[qIdx];
-        if(!qData) return finish();
+        let data = currentPool[qIdx];
+        
+        document.getElementById('q-en').innerHTML = data.q;
+        document.getElementById('q-hi').innerText = await getHi(data.q);
 
-        const cleanQ = decodeHTML(qData.q);
-        document.getElementById('eng-q').innerText = cleanQ;
-        document.getElementById('hin-q').innerText = await translate(cleanQ);
-
-        const container = document.getElementById('options');
-        container.innerHTML = "";
-
-        // Options ko shuffle karna
-        let shuffledOpts = qData.opts.sort(() => Math.random() - 0.5);
-
-        for (let opt of shuffledOpts) {
-            let cleanOpt = decodeHTML(opt);
-            let hindiOpt = await translate(cleanOpt);
-            let li = document.createElement('li');
-            li.innerHTML = `${cleanOpt} <span class="opt-hin">${hindiOpt}</span>`;
-            li.onclick = () => check(cleanOpt, decodeHTML(qData.a), li);
-            container.appendChild(li);
+        let html = "";
+        let shuffled = [...data.opts].sort(() => 0.5 - Math.random());
+        
+        for(let o of shuffled) {
+            let hO = await getHi(o);
+            html += `<li onclick="check(this, '${o}', '${data.a}')">${o} <br><small style="color:#666">${hO}</small></li>`;
         }
+        document.getElementById('opt-list').innerHTML = html;
     }
 
-    function check(sel, cor, el) {
+    function check(el, sel, cor) {
         if(answered) return;
         answered = true;
         if(sel === cor) {
@@ -198,7 +172,8 @@
             el.classList.add('correct');
         } else {
             el.classList.add('wrong');
-            Array.from(document.getElementById('options').children).forEach(li => {
+            // Sahi wala highlight karein
+            Array.from(document.getElementById('opt-list').children).forEach(li => {
                 if(li.innerText.includes(cor)) li.classList.add('correct');
             });
         }
@@ -206,34 +181,31 @@
         document.getElementById('next-btn').style.display = 'block';
     }
 
-    function loadNext() {
+    function nextQ() {
         qIdx++;
-        if(qIdx < 10 && qIdx < questions.length) {
-            document.getElementById('q-num').innerText = qIdx + 1;
+        if(qIdx < currentPool.length) {
+            document.getElementById('count').innerText = qIdx + 1;
             showQ();
-        } else { finish(); }
+        } else {
+            alert("Quiz Poori Hui! Score: " + score + "/10");
+            saveLB();
+            location.reload();
+        }
     }
 
-    function finish() {
-        alert("Quiz Khatam! Score: " + score + "/10");
-        let lb = JSON.parse(localStorage.getItem('ss_bilingual_lb')) || [];
-        lb.push({name: student, class: selClass, score: score});
+    function saveLB() {
+        let lb = JSON.parse(localStorage.getItem('hybrid_lb')) || [];
+        lb.push({name: studentName, class: selectedClass, score: score});
         lb.sort((a,b) => b.score - a.score);
-        localStorage.setItem('ss_bilingual_lb', JSON.stringify(lb.slice(0, 10)));
-        location.reload();
+        localStorage.setItem('hybrid_lb', JSON.stringify(lb.slice(0, 10)));
     }
 
     function loadLB() {
-        const lb = JSON.parse(localStorage.getItem('ss_bilingual_lb')) || [];
-        document.getElementById('lb-body').innerHTML = lb.map(i => `<tr><td>${i.name}</td><td>${i.class}</td><td><b>${i.score}</b></td></tr>`).join('');
+        let lb = JSON.parse(localStorage.getItem('hybrid_lb')) || [];
+        document.getElementById('lb-data').innerHTML = lb.map(i => `<tr><td>${i.name}</td><td>${i.class}</td><td><b>${i.score}</b></td></tr>`).join('');
     }
 
-    function decodeHTML(html) {
-        let txt = document.createElement("textarea");
-        txt.innerHTML = html;
-        return txt.value;
-    }
-
+    loadSheet();
     loadLB();
 </script>
 
