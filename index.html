@@ -3,84 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SS Samaj Kalyan | Hybrid Quiz Portal</title>
+    <title>SS Samaj Kalyan | Mega Quiz Portal</title>
     <style>
         :root { --primary: #1e3799; --accent: #d63031; --bg: #f1f2f6; --success: #27ae60; }
         body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #2d3436; }
-        
         header { background: white; padding: 15px 5%; display: flex; justify-content: space-between; border-bottom: 4px solid var(--primary); box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .hero { background: linear-gradient(135deg, var(--primary), #0984e3); color: white; padding: 40px 20px; text-align: center; margin-bottom: 20px; }
-
+        .hero { background: linear-gradient(135deg, var(--primary), #0984e3); color: white; padding: 35px 20px; text-align: center; }
         .container { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr; gap: 20px; padding: 20px; }
-        
         .quiz-card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; }
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin: 20px 0; }
-        
         .btn { padding: 15px; border: none; border-radius: 10px; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; }
         .btn-class { background: #3498db; }
         .btn-sub { background: #2ecc71; }
         .btn:hover { transform: translateY(-3px); opacity: 0.9; }
-
         .q-text { font-size: 1.4rem; font-weight: bold; color: var(--primary); margin-bottom: 10px; text-align: left; }
         .q-hin { font-size: 1.1rem; color: var(--accent); font-style: italic; margin-bottom: 25px; text-align: left; display: block; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-
         .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; list-style: none; padding: 0; }
-        .options-grid li { background: #f8f9fa; padding: 15px; border-radius: 10px; border: 2px solid #eee; cursor: pointer; transition: 0.2s; text-align: left; position: relative; }
+        .options-grid li { background: #f8f9fa; padding: 15px; border-radius: 10px; border: 2px solid #eee; cursor: pointer; transition: 0.2s; text-align: left; }
         .options-grid li:hover { border-color: var(--primary); background: #edf2f7; }
-        .correct { background: var(--success) !important; color: white !important; border-color: #219150 !important; }
-        .wrong { background: var(--accent) !important; color: white !important; border-color: #a32424 !important; }
-
-        #next-btn { background: var(--primary); width: 100%; margin-top: 20px; display: none; padding: 18px; font-size: 1.1rem; }
-        
-        .leaderboard { background: white; padding: 20px; border-radius: 15px; height: fit-content; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { padding: 12px; border-bottom: 1px solid #eee; text-align: left; font-size: 0.9rem; }
-
+        .correct { background: var(--success) !important; color: white !important; }
+        .wrong { background: var(--accent) !important; color: white !important; }
+        #next-btn { background: var(--primary); width: 100%; margin-top: 20px; display: none; padding: 18px; font-size: 1.1rem; color: white; }
+        .leaderboard { background: white; padding: 20px; border-radius: 15px; height: fit-content; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 10px; border-bottom: 1px solid #eee; text-align: left; }
         @media (max-width: 800px) { .container { grid-template-columns: 1fr; } .options-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
 <header>
-    <div style="font-size: 1.4rem; font-weight: 800; color: var(--primary);">SHREE SHIV SAMAJ KALYAN</div>
-    <div id="student-tag" style="font-weight: bold; color: var(--accent);"></div>
+    <div style="font-size: 1.2rem; font-weight: 800; color: var(--primary);">SHREE SHIV SAMAJ KALYAN</div>
+    <div id="student-tag" style="font-weight:bold; color:var(--accent)"></div>
 </header>
 
 <div class="hero">
-    <h1>Hybrid Digital Quiz Portal</h1>
-    <p>API for GK | Google Sheets for Grammar</p>
+    <h1>Smart Exam Portal</h1>
+    <p>Class-wise Questions | English & Hindi Grammar</p>
 </div>
 
 <div class="container">
     <div class="quiz-card">
         <div id="menu">
-            <h3 style="text-align:left;">1. Class Chunein</h3>
+            <h3>1. Class Chunein</h3>
             <div class="grid">
-                <button class="btn btn-class" onclick="selC('1-5', 'easy')">Class 1-5</button>
-                <button class="btn btn-class" onclick="selC('6-8', 'medium')">Class 6-8</button>
-                <button class="btn btn-class" onclick="selC('9-12', 'hard')">Class 9-12</button>
+                <button class="btn btn-class" onclick="selC('1-5')">Class 1-5 (India Only)</button>
+                <button class="btn btn-class" onclick="selC('6-12')">Class 6-12 (Mix)</button>
             </div>
-            <h3 style="text-align:left;">2. Subject Chunein</h3>
+            <h3>2. Subject Chunein</h3>
             <div class="grid">
                 <button class="btn btn-sub" onclick="startQuiz('GK')">GK (API)</button>
-                <button class="btn btn-sub" style="background:#6c5ce7" onclick="startQuiz('ENG')">English (Sheet)</button>
-                <button class="btn btn-sub" style="background:#fd9644" onclick="startQuiz('HIN')">Hindi (Sheet)</button>
+                <button class="btn btn-sub" style="background:#6c5ce7" onclick="startQuiz('ENG')">English Grammar</button>
+                <button class="btn btn-sub" style="background:#fd9644" onclick="startQuiz('HIN')">Hindi Grammar</button>
             </div>
         </div>
 
         <div id="quiz-area" style="display:none;">
-            <div id="question-container">
-                <div class="q-text" id="q-en">Loading...</div>
-                <div class="q-hin" id="q-hi">Loading translation...</div>
-                <ul class="options-grid" id="opt-list"></ul>
-            </div>
+            <div class="q-text" id="q-en"></div>
+            <div class="q-hin" id="q-hi"></div>
+            <ul class="options-grid" id="opt-list"></ul>
             <button id="next-btn" class="btn" onclick="nextQ()">Next Sawal →</button>
-            <div style="margin-top:20px; font-weight:bold;">Sawal: <span id="count">1</span>/10 | Score: <span id="score">0</span></div>
+            <div style="margin-top:20px;">Sawal: <span id="count">1</span>/10 | Score: <span id="score">0</span></div>
         </div>
     </div>
 
     <div class="leaderboard">
-        <h3 style="margin-top:0;">🏆 Top Scorers</h3>
+        <h3>🏆 Rank Board</h3>
         <table>
             <thead><tr><th>Naam</th><th>Class</th><th>Score</th></tr></thead>
             <tbody id="lb-data"></tbody>
@@ -89,60 +77,65 @@
 </div>
 
 <script>
-    // YAHAN APNA GOOGLE SHEET CSV LINK DALEIN
-    const SHEET_URL = 'YOUR_CSV_LINK_HERE';
+    // ERROR-FREE DATABASE
+    const megaDB = {
+        'ENG': [
+            {q: "What is the plural of 'Child'?", a: "Children", opts: ["Children", "Childs", "Childrens", "Childes"]},
+            {q: "Which is a verb?", a: "Sing", opts: ["Sing", "Song", "Beautiful", "Quickly"]},
+            {q: "Opposite of 'Day'?", a: "Night", opts: ["Night", "Sun", "Morning", "Light"]},
+            {q: "Synonym of 'Tiny'?", a: "Small", opts: ["Small", "Large", "Huge", "Giant"]},
+            {q: "Which word is a Noun?", a: "Apple", opts: ["Apple", "Eat", "Softly", "Running"]},
+            {q: "Identify the Pronoun:", a: "They", opts: ["They", "Table", "Green", "Slowly"]},
+            {q: "Female of 'Lion'?", a: "Lioness", opts: ["Lioness", "Tiger", "Liony", "Cat"]},
+            {q: "What is a group of fish called?", a: "School", opts: ["School", "Pack", "Herd", "Pride"]},
+            {q: "Past tense of 'Run'?", a: "Ran", opts: ["Ran", "Runs", "Running", "Runned"]},
+            {q: "Which is an Adjective?", a: "Beautiful", opts: ["Beautiful", "Run", "Clearly", "House"]}
+        ],
+        'HIN': [
+            {q: "संज्ञा के कितने भेद होते हैं?", a: "5", opts: ["5", "2", "4", "3"]},
+            {q: "सर्वनाम के कितने भेद होते हैं?", a: "6", opts: ["6", "4", "5", "8"]},
+            {q: "विशेषण के कितने मुख्य भेद हैं?", a: "4", opts: ["4", "3", "5", "6"]},
+            {q: "हिंदी वर्णमाला में कुल कितने स्वर होते हैं?", a: "11", opts: ["11", "10", "13", "12"]},
+            {q: "क्रिया के कितने मुख्य भेद होते हैं?", a: "2", opts: ["2", "3", "4", "5"]},
+            {q: "'हिमालय' शब्द में कौन-सी संज्ञा है?", a: "व्यक्तिवाचक", opts: ["व्यक्तिवाचक", "जातिवाचक", "भाववाचक", "समूहवाचक"]},
+            {q: "'लड़का' शब्द में कौन-सी संज्ञा है?", a: "जातिवाचक", opts: ["जातिवाचक", "व्यक्तिवाचक", "भाववाचक", "द्रव्यवाचक"]},
+            {q: "मिठास' शब्द में कौन-सी संज्ञा है?", a: "भाववाचक", opts: ["भाववाचक", "जातिवाचक", "व्यक्तिवाचक", "समूहवाचक"]},
+            {q: "पुरुषवाचक सर्वनाम के कितने प्रकार होते हैं?", a: "3", opts: ["3", "2", "4", "5"]},
+            {q: "'वह' कौन-सा सर्वनाम है?", a: "निश्चयवाचक", opts: ["निश्चयवाचक", "अनिश्चयवाचक", "निजवाचक", "संबंधवाचक"]},
+            {q: "आजन्म शब्द में कौन-सा समास है?", a: "अव्ययीभाव", opts: ["अव्ययीभाव", "कर्मधारय", "द्विगु", "तत्पुरुष"]},
+            {q: "आकाश का पर्यायवाची शब्द क्या है?", a: "गगन", opts: ["गगन", "जलद", "नीरज", "पावक"]}
+        ]
+    };
 
-    let sheetData = [];
     let currentPool = [];
-    let qIdx = 0, score = 0, studentName = "", selectedClass = "", selectedDiff = "", answered = false;
+    let qIdx = 0, score = 0, student = "", selClass = "", answered = false;
 
-    // Sheet se data load karna
-    async function loadSheet() {
-        try {
-            const res = await fetch(SHEET_URL);
-            const text = await res.text();
-            const rows = text.split('\n').slice(1);
-            sheetData = rows.map(r => {
-                const c = r.split(',');
-                return { q: c[0], a: c[1], opts: [c[1], c[2], c[3], c[4]], sub: c[5]?.trim() };
-            });
-        } catch (e) { console.log("Sheet connecting..."); }
-    }
-
-    function selC(c, d) { selectedClass = c; selectedDiff = d; alert("Class " + c + " Set!"); }
+    function selC(c) { selClass = c; alert("Class " + c + " Set!"); }
 
     async function getHi(txt) {
         try {
             const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=hi&dt=t&q=${encodeURI(txt)}`);
-            const data = await res.json();
-            return data[0][0][0];
+            const data = await res.json(); return data[0][0][0];
         } catch(e) { return txt; }
     }
 
     async function startQuiz(type) {
-        if(!selectedClass) return alert("Pehle Class Chunein!");
-        studentName = prompt("Student ka naam:");
-        if(!studentName) return;
-
-        document.getElementById('menu').innerHTML = "<h3>🔄 Sawal taiyaar ho rahe hain...</h3>";
+        if(!selClass) return alert("Pehle Class Chunein!");
+        student = prompt("Aapna Naam Likhein:");
+        if(!student) return;
 
         if(type === 'GK') {
-            // API CALL
-            const res = await fetch(`https://opentdb.com/api.php?amount=10&category=9&difficulty=${selectedDiff}&type=multiple`);
+            let diff = (selClass === '1-5') ? 'easy' : 'medium';
+            const res = await fetch(`https://opentdb.com/api.php?amount=10&category=9&difficulty=${diff}&type=multiple`);
             const data = await res.json();
             currentPool = data.results.map(i => ({ q: i.question, a: i.correct_answer, opts: [...i.incorrect_answers, i.correct_answer] }));
         } else {
-            // SHEET CALL
-            currentPool = sheetData.filter(i => i.sub === type).sort(() => 0.5 - Math.random()).slice(0, 10);
-            if(currentPool.length === 0) {
-                alert("Sheet me data nahi mila! Code me diye demo sawal load honge.");
-                currentPool = [{q: "Sample Question?", a: "Ans1", opts: ["Ans1", "Ans2", "Ans3", "Ans4"]}];
-            }
+            currentPool = megaDB[type].sort(() => 0.5 - Math.random()).slice(0, 10);
         }
 
         document.getElementById('menu').style.display = 'none';
         document.getElementById('quiz-area').style.display = 'block';
-        document.getElementById('student-tag').innerText = studentName;
+        document.getElementById('student-tag').innerText = student;
         showQ();
     }
 
@@ -150,16 +143,14 @@
         answered = false;
         document.getElementById('next-btn').style.display = 'none';
         let data = currentPool[qIdx];
-        
         document.getElementById('q-en').innerHTML = data.q;
         document.getElementById('q-hi').innerText = await getHi(data.q);
 
         let html = "";
         let shuffled = [...data.opts].sort(() => 0.5 - Math.random());
-        
         for(let o of shuffled) {
             let hO = await getHi(o);
-            html += `<li onclick="check(this, '${o}', '${data.a}')">${o} <br><small style="color:#666">${hO}</small></li>`;
+            html += `<li onclick="check(this, '${o.replace(/'/g, "\\'")}', '${data.a.replace(/'/g, "\\'")}')">${o} <br><small>${hO}</small></li>`;
         }
         document.getElementById('opt-list').innerHTML = html;
     }
@@ -167,12 +158,9 @@
     function check(el, sel, cor) {
         if(answered) return;
         answered = true;
-        if(sel === cor) {
-            score++;
-            el.classList.add('correct');
-        } else {
-            el.classList.add('wrong');
-            // Sahi wala highlight karein
+        if(sel === cor) { score++; el.classList.add('correct'); }
+        else { 
+            el.classList.add('wrong'); 
             Array.from(document.getElementById('opt-list').children).forEach(li => {
                 if(li.innerText.includes(cor)) li.classList.add('correct');
             });
@@ -183,31 +171,29 @@
 
     function nextQ() {
         qIdx++;
-        if(qIdx < currentPool.length) {
+        if(qIdx < 10 && qIdx < currentPool.length) {
             document.getElementById('count').innerText = qIdx + 1;
             showQ();
         } else {
-            alert("Quiz Poori Hui! Score: " + score + "/10");
+            alert("Quiz Over! Score: " + score + "/10");
             saveLB();
             location.reload();
         }
     }
 
     function saveLB() {
-        let lb = JSON.parse(localStorage.getItem('hybrid_lb')) || [];
-        lb.push({name: studentName, class: selectedClass, score: score});
+        let lb = JSON.parse(localStorage.getItem('ss_lb')) || [];
+        lb.push({name: student, class: selClass, score: score});
         lb.sort((a,b) => b.score - a.score);
-        localStorage.setItem('hybrid_lb', JSON.stringify(lb.slice(0, 10)));
+        localStorage.setItem('ss_lb', JSON.stringify(lb.slice(0, 10)));
     }
 
     function loadLB() {
-        let lb = JSON.parse(localStorage.getItem('hybrid_lb')) || [];
+        let lb = JSON.parse(localStorage.getItem('ss_lb')) || [];
         document.getElementById('lb-data').innerHTML = lb.map(i => `<tr><td>${i.name}</td><td>${i.class}</td><td><b>${i.score}</b></td></tr>`).join('');
     }
 
-    loadSheet();
     loadLB();
 </script>
-
 </body>
 </html>
